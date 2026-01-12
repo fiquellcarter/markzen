@@ -1,5 +1,6 @@
 <script lang="ts">
   import favicon from '$lib/assets/favicon.svg';
+  import { Toaster } from '$lib/components/ui/sonner';
 
   import './layout.css';
 
@@ -9,5 +10,7 @@
 <svelte:head>
   <link rel="icon" href={favicon} />
 </svelte:head>
+
+<Toaster closeButton richColors />
 
 {@render children()}
