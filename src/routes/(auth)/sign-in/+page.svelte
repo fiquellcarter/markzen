@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { APIError } from 'better-auth/api';
   import { toast } from 'svelte-sonner';
 
   import { auth } from '$lib/auth/client';
@@ -12,16 +13,14 @@
     isLoading = true;
 
     try {
-      const { error } = await auth.signIn.social({
+      await auth.signIn.social({
         provider: 'github',
         callbackURL: '/dashboard',
       });
-
-      if (error) {
-        toast.error(error.message!);
-      }
     } catch (error) {
-      console.error(error);
+      if (error instanceof APIError) {
+        toast.error(error.message);
+      }
     } finally {
       isLoading = false;
     }
