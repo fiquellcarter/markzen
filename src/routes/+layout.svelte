@@ -11,6 +11,6 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<Toaster closeButton richColors />
+<Toaster position="top-center" />
 
 {@render children()}
