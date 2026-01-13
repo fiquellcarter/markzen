@@ -131,3 +131,43 @@
     @apply size-4;
   }
 }
+
+@layer components {
+  .typography {
+    & :where(h1, h2, h3, h4, h5, h6):not(.not-typography *) {
+      @apply mt-4 font-semibold tracking-tight first:mt-0;
+    }
+
+    & h1:not(.not-typography *) {
+      @apply text-2xl;
+    }
+
+    & h2:not(.not-typography *) {
+      @apply text-xl;
+    }
+
+    & h3:not(.not-typography *) {
+      @apply text-lg;
+    }
+
+    & h4:not(.not-typography *) {
+      @apply text-base;
+    }
+
+    & h5:not(.not-typography *) {
+      @apply text-sm;
+    }
+
+    & h6:not(.not-typography *) {
+      @apply text-xs;
+    }
+
+    & :where(h1, h2, h3, h4, h5, h6) + p:not(.not-typography *) {
+      @apply mt-0;
+    }
+
+    & p:not(.not-typography *) {
+      @apply leading-7 not-first:mt-2;
+    }
+  }
+}
