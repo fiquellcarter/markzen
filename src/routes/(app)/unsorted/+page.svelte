@@ -8,7 +8,7 @@
 <section>
   <div class="flex items-center justify-between gap-4">
     <div>
-      <h1>All</h1>
+      <h1>Unsorted</h1>
       <p>You have 6 bookmarks saved here.</p>
     </div>
     <ButtonGroup.Root>
