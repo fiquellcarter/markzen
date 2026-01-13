@@ -19,7 +19,7 @@
   <Sidebar.Header>
     <Sidebar.Menu>
       <Sidebar.MenuItem>
-        <Sidebar.MenuButton>
+        <Sidebar.MenuButton tooltipContent="Markzen">
           {#snippet child({ props })}
             <a href={resolve('/dashboard')} {...props}>
               <LoaderPinwheel />
@@ -36,7 +36,7 @@
         <Sidebar.Menu>
           {#each items as item (item.title)}
             <Sidebar.MenuItem>
-              <Sidebar.MenuButton>
+              <Sidebar.MenuButton tooltipContent={item.title}>
                 {#snippet child({ props })}
                   <a href={resolve(item.url)} {...props}>
                     <item.icon />
@@ -59,7 +59,7 @@
         <Sidebar.Menu>
           {#each collections as collection (collection.title)}
             <Sidebar.MenuItem>
-              <Sidebar.MenuButton>
+              <Sidebar.MenuButton tooltipContent={collection.title}>
                 {#snippet child({ props })}
                   <a href={resolve(collection.url)} {...props}>
                     <collection.icon />
@@ -76,7 +76,7 @@
   <Sidebar.Footer>
     <Sidebar.Menu>
       <Sidebar.MenuItem>
-        <Sidebar.MenuButton variant="outline">
+        <Sidebar.MenuButton variant="outline" tooltipContent="Add Bookmark">
           <Plus />
           Add Bookmark
         </Sidebar.MenuButton>
