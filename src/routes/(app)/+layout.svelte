@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { Moon, Sun } from '@lucide/svelte';
+  import { toggleMode } from 'mode-watcher';
+
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Button } from '$lib/components/ui/button';
@@ -15,7 +18,12 @@
         <div class="inline-flex w-1/2 items-center justify-start">
           <Sidebar.Trigger />
         </div>
-        <div class="inline-flex w-1/2 items-center justify-end">
+        <div class="inline-flex w-1/2 items-center justify-end gap-2">
+          <Button variant="outline" size="icon" onclick={toggleMode}>
+            <Sun class="scale-100 rotate-0 transition-all! dark:scale-0 dark:-rotate-90" />
+            <Moon class="absolute scale-0 rotate-90 transition-all! dark:scale-100 dark:rotate-0" />
+            <span class="sr-only">Toggle Theme</span>
+          </Button>
           <Button href="/profile" variant="outline">
             {data.session.user.name}
             <Avatar.Root class="size-6">

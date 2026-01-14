@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { ModeWatcher } from 'mode-watcher';
+
   import favicon from '$lib/assets/favicon.svg';
   import { Toaster } from '$lib/components/ui/sonner';
 
@@ -11,6 +13,7 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
+<ModeWatcher />
 <Toaster position="top-center" />
 
 {@render children()}
