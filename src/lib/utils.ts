@@ -1,9 +1,19 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+import { dev } from '$app/environment';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const delay = (ms = 2000) => {
+  if (!dev) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 export type WithoutChild<T> = T extends {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

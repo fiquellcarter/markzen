@@ -11,7 +11,7 @@
 </script>
 
 <Sidebar.Provider style="--sidebar-width: 18rem; --sidebar-width-mobile: 20rem;">
-  <AppSidebar />
+  <AppSidebar {data} />
   <Sidebar.Inset>
     <div class="container">
       <div class="flex min-h-12 w-full items-center py-2">
