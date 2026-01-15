@@ -9,7 +9,7 @@
   <div class="flex items-center justify-between gap-4">
     <div>
       <h1>Unsorted</h1>
-      <p>You have 6 bookmarks saved here.</p>
+      <p class="text-muted-foreground">You have 6 bookmarks saved here.</p>
     </div>
     <ButtonGroup.Root>
       <Button variant="default" size="icon">

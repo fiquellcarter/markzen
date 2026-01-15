@@ -10,7 +10,7 @@
   let { data, children } = $props();
 </script>
 
-<Sidebar.Provider style="--sidebar-width: 18rem; --sidebar-width-mobile: 20rem;">
+<Sidebar.Provider style="--sidebar-width: 20rem; --sidebar-width-mobile: 20rem;">
   <AppSidebar {data} />
   <Sidebar.Inset>
     <div class="container">

@@ -51,7 +51,7 @@
   ] as const;
 </script>
 
-<Sidebar.Root variant="inset" collapsible="icon">
+<Sidebar.Root variant="floating" collapsible="icon">
   <Sidebar.Header>
     <Sidebar.Menu>
       <Sidebar.MenuItem>

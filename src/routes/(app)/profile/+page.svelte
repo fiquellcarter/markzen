@@ -32,7 +32,7 @@
   <div class="flex items-center justify-between gap-4">
     <div>
       <h1>Profile</h1>
-      <p>Update your basic account information and settings.</p>
+      <p class="text-muted-foreground">Update your basic account information and settings.</p>
     </div>
     <Button variant="destructive" disabled={isLoading} onclick={handleSignOut}>
       {#if isLoading}
