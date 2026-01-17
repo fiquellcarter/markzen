@@ -39,7 +39,7 @@ export const actions: Actions = {
 
     await db
       .update(collection)
-      .set({ name: form.data.name, description: form.data.description, slug })
+      .set({ name: form.data.name, description: form.data.description || null, slug })
       .where(eq(collection.id, form.data.id));
 
     redirect(
