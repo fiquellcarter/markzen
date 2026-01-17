@@ -5,4 +5,14 @@ export const createCollectionSchema = z.object({
   description: z.string().optional(),
 });
 
+export const updateCollectionSchema = createCollectionSchema.extend({
+  id: z.uuid(),
+});
+
+export const deleteCollectionSchema = z.object({
+  id: z.uuid(),
+});
+
 export type CreateCollectionSchema = typeof createCollectionSchema;
+export type UpdateCollectionSchema = typeof updateCollectionSchema;
+export type DeleteCollectionSchema = typeof deleteCollectionSchema;

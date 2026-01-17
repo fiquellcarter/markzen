@@ -1,10 +1,13 @@
 <script lang="ts">
   import { Folders, GalleryVerticalEnd, Inbox, LoaderPinwheel, Plus } from '@lucide/svelte';
+  import type { InferSelectModel } from 'drizzle-orm';
   import { toast } from 'svelte-sonner';
+  import { getFlash } from 'sveltekit-flash-message';
   import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
   import { zod4 } from 'sveltekit-superforms/adapters';
 
   import { resolve } from '$app/paths';
+  import { page } from '$app/state';
   import { Button, buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Field from '$lib/components/ui/field';
@@ -13,42 +16,45 @@
   import { Spinner } from '$lib/components/ui/spinner';
   import { Textarea } from '$lib/components/ui/textarea';
   import { createCollectionSchema, type CreateCollectionSchema } from '$lib/schemas/collection';
+  import type { collection } from '$lib/server/db/schema';
 
   let {
     data,
   }: {
     data: {
+      collections: InferSelectModel<typeof collection>[];
       createCollectionForm: SuperValidated<Infer<CreateCollectionSchema>>;
     };
   } = $props();
 
-  let isCreateCollectionOpen = $state(false);
+  let isOpen = $state(false);
 
   // svelte-ignore state_referenced_locally
-  const { form, errors, constraints, enhance, delayed } = superForm(data.createCollectionForm, {
+  const { form, errors, constraints, enhance, submitting } = superForm(data.createCollectionForm, {
     validators: zod4(createCollectionSchema),
-    onUpdated: ({ form }) => {
-      if (!form.message) {
-        return;
-      }
-
-      toast[form.message.type === 'error' ? 'error' : 'success'](form.message.text);
-
-      if (form.message.type === 'success') {
-        isCreateCollectionOpen = false;
+    onResult({ result }) {
+      if (result.type === 'redirect') {
+        isOpen = false;
       }
     },
   });
 
   const items = [
-    { title: 'All', url: '/dashboard', icon: GalleryVerticalEnd },
+    { title: 'All Bookmarks', url: '/dashboard', icon: GalleryVerticalEnd },
     { title: 'Unsorted', url: '/unsorted', icon: Inbox },
   ] as const;
 
-  const collections = [
-    { title: 'Design', url: '/', icon: Folders },
-    { title: 'Developer', url: '/', icon: Folders },
-  ] as const;
+  const flash = getFlash(page);
+
+  $effect(() => {
+    if (!$flash) {
+      return;
+    }
+
+    toast[$flash.type]($flash.message);
+
+    $flash = undefined;
+  });
 </script>
 
 <Sidebar.Root variant="floating" collapsible="icon">
@@ -86,20 +92,20 @@
       </Sidebar.GroupContent>
     </Sidebar.Group>
     <Sidebar.Group>
-      <Sidebar.GroupLabel>Collections</Sidebar.GroupLabel>
-      <Sidebar.GroupAction onclick={() => (isCreateCollectionOpen = true)}>
+      <Sidebar.GroupLabel>Your Collections</Sidebar.GroupLabel>
+      <Sidebar.GroupAction onclick={() => (isOpen = true)}>
         <Plus />
-        <span class="sr-only">New Collection</span>
+        <span class="sr-only">Create Collection</span>
       </Sidebar.GroupAction>
       <Sidebar.GroupContent>
         <Sidebar.Menu>
-          {#each collections as collection (collection.title)}
+          {#each data.collections as collection (collection.id)}
             <Sidebar.MenuItem>
-              <Sidebar.MenuButton tooltipContent={collection.title}>
+              <Sidebar.MenuButton tooltipContent={collection.name}>
                 {#snippet child({ props })}
-                  <a href={resolve(collection.url)} {...props}>
-                    <collection.icon />
-                    <span>{collection.title}</span>
+                  <a href={resolve(`/collection/${collection.slug}`)} {...props}>
+                    <Folders />
+                    <span>{collection.name}</span>
                   </a>
                 {/snippet}
               </Sidebar.MenuButton>
@@ -121,11 +127,11 @@
   </Sidebar.Footer>
 </Sidebar.Root>
 
-<Dialog.Root bind:open={isCreateCollectionOpen}>
+<Dialog.Root bind:open={isOpen}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>New Collection</Dialog.Title>
-      <Dialog.Description>Create a new collection to organize your items.</Dialog.Description>
+      <Dialog.Title>Create Collection</Dialog.Title>
+      <Dialog.Description>Create a new collection to organize your bookmarks.</Dialog.Description>
     </Dialog.Header>
     <form id="collection-form" action="/collection/create" method="POST" use:enhance>
       <Field.Set>
@@ -136,14 +142,16 @@
               type="text"
               id="name"
               name="name"
-              placeholder="Design ideas"
+              placeholder="UI Inspiration"
               aria-invalid={$errors.name ? 'true' : undefined}
               bind:value={$form.name}
               {...$constraints.name} />
             {#if $errors.name}
               <Field.FieldError>{$errors.name}</Field.FieldError>
             {:else}
-              <Field.Description>A short name to identify this collection.</Field.Description>
+              <Field.Description>
+                A clear and recognizable name for this collection.
+              </Field.Description>
             {/if}
           </Field.Field>
           <Field.Field>
@@ -151,14 +159,16 @@
             <Textarea
               id="description"
               name="description"
-              placeholder="Optional description"
+              placeholder="Optional notes about this collection"
               aria-invalid={$errors.description ? 'true' : undefined}
               bind:value={$form.description}
               {...$constraints.description} />
             {#if $errors.description}
               <Field.FieldError>{$errors.description}</Field.FieldError>
             {:else}
-              <Field.Description>Optional notes about this collection.</Field.Description>
+              <Field.Description>
+                Optional context to help you remember what this collection is for.
+              </Field.Description>
             {/if}
           </Field.Field>
         </Field.Group>
@@ -166,11 +176,11 @@
     </form>
     <Dialog.Footer>
       <Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
-      <Button type="submit" form="collection-form" disabled={$delayed}>
-        {#if $delayed}
+      <Button type="submit" form="collection-form" disabled={$submitting}>
+        {#if $submitting}
           <Spinner />
         {/if}
-        Create
+        Create Collection
       </Button>
     </Dialog.Footer>
   </Dialog.Content>
