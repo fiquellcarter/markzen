@@ -12,9 +12,11 @@
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Field from '$lib/components/ui/field';
   import { Input } from '$lib/components/ui/input';
+  import * as Select from '$lib/components/ui/select';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import { Spinner } from '$lib/components/ui/spinner';
   import { Textarea } from '$lib/components/ui/textarea';
+  import { createBookmarkSchema, type CreateBookmarkSchema } from '$lib/schemas/bookmark';
   import { createCollectionSchema, type CreateCollectionSchema } from '$lib/schemas/collection';
   import type { collection } from '$lib/server/db/schema';
 
@@ -24,20 +26,50 @@
     data: {
       collections: InferSelectModel<typeof collection>[];
       createCollectionForm: SuperValidated<Infer<CreateCollectionSchema>>;
+      createBookmarkForm: SuperValidated<Infer<CreateBookmarkSchema>>;
     };
   } = $props();
 
-  let isOpen = $state(false);
+  let isCollectionOpen = $state(false);
+  let isBookmarkOpen = $state(false);
+  let selectedCollectionId = $state('');
 
   // svelte-ignore state_referenced_locally
-  const { form, errors, constraints, enhance, submitting } = superForm(data.createCollectionForm, {
+  const {
+    form: collectionForm,
+    errors: collectionErrors,
+    constraints: collectionConstraints,
+    enhance: collectionEnhance,
+    submitting: collectionSubmitting,
+  } = superForm(data.createCollectionForm, {
     validators: zod4(createCollectionSchema),
     onResult({ result }) {
       if (result.type === 'redirect') {
-        isOpen = false;
+        isCollectionOpen = false;
       }
     },
   });
+
+  // svelte-ignore state_referenced_locally
+  const {
+    form: bookmarkForm,
+    errors: bookmarkErrors,
+    constraints: bookmarkConstraints,
+    enhance: bookmarkEnhance,
+    submitting: bookmarkSubmitting,
+  } = superForm(data.createBookmarkForm, {
+    validators: zod4(createBookmarkSchema),
+    onResult({ result }) {
+      if (result.type === 'success') {
+        isBookmarkOpen = false;
+      }
+    },
+  });
+
+  const collectionLabel = $derived(
+    data.collections.find((collection) => collection.id === selectedCollectionId)?.name ??
+      'Unsorted'
+  );
 
   const items = [
     { title: 'All Bookmarks', url: '/dashboard', icon: GalleryVerticalEnd },
@@ -47,6 +79,8 @@
   const flash = getFlash(page);
 
   $effect(() => {
+    $bookmarkForm.collectionId = selectedCollectionId === '' ? null : selectedCollectionId;
+
     if (!$flash) {
       return;
     }
@@ -93,7 +127,7 @@
     </Sidebar.Group>
     <Sidebar.Group>
       <Sidebar.GroupLabel>Your Collections</Sidebar.GroupLabel>
-      <Sidebar.GroupAction onclick={() => (isOpen = true)}>
+      <Sidebar.GroupAction onclick={() => (isCollectionOpen = true)}>
         <Plus />
         <span class="sr-only">Create Collection</span>
       </Sidebar.GroupAction>
@@ -118,7 +152,10 @@
   <Sidebar.Footer>
     <Sidebar.Menu>
       <Sidebar.MenuItem>
-        <Sidebar.MenuButton variant="outline" tooltipContent="Add Bookmark">
+        <Sidebar.MenuButton
+          variant="outline"
+          tooltipContent="Add Bookmark"
+          onclick={() => (isBookmarkOpen = true)}>
           <Plus />
           Add Bookmark
         </Sidebar.MenuButton>
@@ -127,13 +164,13 @@
   </Sidebar.Footer>
 </Sidebar.Root>
 
-<Dialog.Root bind:open={isOpen}>
+<Dialog.Root bind:open={isCollectionOpen}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Create Collection</Dialog.Title>
       <Dialog.Description>Create a new collection to organize your bookmarks.</Dialog.Description>
     </Dialog.Header>
-    <form id="collection-form" action="/collection/create" method="POST" use:enhance>
+    <form id="collection-form" action="/collection/create" method="POST" use:collectionEnhance>
       <Field.Set>
         <Field.Group>
           <Field.Field>
@@ -143,11 +180,11 @@
               id="name"
               name="name"
               placeholder="UI Inspiration"
-              aria-invalid={$errors.name ? 'true' : undefined}
-              bind:value={$form.name}
-              {...$constraints.name} />
-            {#if $errors.name}
-              <Field.FieldError>{$errors.name}</Field.FieldError>
+              aria-invalid={$collectionErrors.name ? 'true' : undefined}
+              bind:value={$collectionForm.name}
+              {...$collectionConstraints.name} />
+            {#if $collectionErrors.name}
+              <Field.FieldError>{$collectionErrors.name}</Field.FieldError>
             {:else}
               <Field.Description>
                 A clear and recognizable name for this collection.
@@ -160,11 +197,11 @@
               id="description"
               name="description"
               placeholder="Optional notes about this collection"
-              aria-invalid={$errors.description ? 'true' : undefined}
-              bind:value={$form.description}
-              {...$constraints.description} />
-            {#if $errors.description}
-              <Field.FieldError>{$errors.description}</Field.FieldError>
+              aria-invalid={$collectionErrors.description ? 'true' : undefined}
+              bind:value={$collectionForm.description}
+              {...$collectionConstraints.description} />
+            {#if $collectionErrors.description}
+              <Field.FieldError>{$collectionErrors.description}</Field.FieldError>
             {:else}
               <Field.Description>
                 Optional context to help you remember what this collection is for.
@@ -176,11 +213,67 @@
     </form>
     <Dialog.Footer>
       <Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
-      <Button type="submit" form="collection-form" disabled={$submitting}>
-        {#if $submitting}
+      <Button type="submit" form="collection-form" disabled={$collectionSubmitting}>
+        {#if $collectionSubmitting}
           <Spinner />
         {/if}
         Create Collection
+      </Button>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>
+
+<Dialog.Root bind:open={isBookmarkOpen}>
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.Title>Create Bookmark</Dialog.Title>
+      <Dialog.Description>Add a new bookmark to your collection.</Dialog.Description>
+    </Dialog.Header>
+    <form id="bookmark-form" action="/bookmark/create" method="POST" use:bookmarkEnhance>
+      <input type="hidden" name="collectionId" bind:value={$bookmarkForm.collectionId} />
+      <Field.Set>
+        <Field.Group>
+          <Field.Field>
+            <Field.Label for="url">URL</Field.Label>
+            <Input
+              type="url"
+              id="url"
+              name="url"
+              placeholder="https://example.com"
+              aria-invalid={$bookmarkErrors.url ? 'true' : undefined}
+              bind:value={$bookmarkForm.url}
+              {...$bookmarkConstraints.url} />
+            {#if $bookmarkErrors.url}
+              <Field.FieldError>{$bookmarkErrors.url}</Field.FieldError>
+            {:else}
+              <Field.Description>The URL of the page you want to bookmark.</Field.Description>
+            {/if}
+          </Field.Field>
+          <Field.Field>
+            <Field.Label for="collection">Collection</Field.Label>
+            <Select.Root type="single" bind:value={selectedCollectionId}>
+              <Select.Trigger id="collection">
+                {collectionLabel}
+              </Select.Trigger>
+              <Select.Content>
+                <Select.Item value="">Unsorted</Select.Item>
+                {#each data.collections as collection (collection.id)}
+                  <Select.Item value={collection.id}>{collection.name}</Select.Item>
+                {/each}
+              </Select.Content>
+            </Select.Root>
+            <Field.Description>Choose a collection for this bookmark.</Field.Description>
+          </Field.Field>
+        </Field.Group>
+      </Field.Set>
+    </form>
+    <Dialog.Footer>
+      <Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
+      <Button type="submit" form="bookmark-form" disabled={$bookmarkSubmitting}>
+        {#if $bookmarkSubmitting}
+          <Spinner />
+        {/if}
+        Create Bookmark
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

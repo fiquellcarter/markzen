@@ -6,10 +6,10 @@
 </script>
 
 <section>
-  <div class="flex items-center justify-between gap-4">
+  <div class="flex items-center justify-between gap-2">
     <div>
-      <h1>All</h1>
-      <p class="text-muted-foreground">You have 6 bookmarks saved here.</p>
+      <h1>All Bookmarks</h1>
+      <p class="text-muted-foreground">You have 6 saved bookmarks</p>
     </div>
     <ButtonGroup.Root>
       <Button variant="default" size="icon">
