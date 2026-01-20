@@ -37,13 +37,16 @@ export const actions: Actions = {
 
     const metadata = await extractMetadata(form.data.url);
 
-    await db.update(bookmark).set({
-      collectionId: form.data.collectionId,
-      url: form.data.url,
-      title: form.data.title,
-      description: form.data.description,
-      favicon: metadata.favicon,
-    }).where(eq(bookmark.id, form.data.id));
+    await db
+      .update(bookmark)
+      .set({
+        collectionId: form.data.collectionId,
+        url: form.data.url,
+        title: form.data.title,
+        description: form.data.description,
+        favicon: metadata.favicon,
+      })
+      .where(eq(bookmark.id, form.data.id));
 
     setFlash({ type: 'success', message: 'Bookmark updated successfully' }, cookies);
   },
