@@ -4,7 +4,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
 import { auth } from '$lib/auth/server';
-import { createBookmarkSchema } from '$lib/schemas/bookmark.js';
+import { createBookmarkSchema } from '$lib/schemas/bookmark';
 import { createCollectionSchema } from '$lib/schemas/collection';
 import { db } from '$lib/server/db';
 import { collection } from '$lib/server/db/schema';

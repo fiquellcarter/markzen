@@ -7,7 +7,7 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 import { deleteCollectionSchema } from '$lib/schemas/collection';
 import { db } from '$lib/server/db';
 import { collection } from '$lib/server/db/schema';
-import { delay } from '$lib/utils.js';
+import { delay } from '$lib/utils';
 
 import type { Actions } from './$types';
 

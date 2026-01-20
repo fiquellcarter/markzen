@@ -26,7 +26,7 @@
           </Button>
           <Button href="/profile" variant="outline">
             {data.session.user.name}
-            <Avatar.Root class="size-6">
+            <Avatar.Root class="size-5">
               <Avatar.Image src={data.session.user.image} alt={data.session.user.name} />
               <Avatar.Fallback>{data.session.user.name.charAt(0)}</Avatar.Fallback>
             </Avatar.Root>
