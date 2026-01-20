@@ -7,7 +7,7 @@ import { auth } from '$lib/auth/server';
 import { createBookmarkSchema } from '$lib/schemas/bookmark';
 import { createCollectionSchema } from '$lib/schemas/collection';
 import { db } from '$lib/server/db';
-import { collection } from '$lib/server/db/schema';
+import { bookmark, collection } from '$lib/server/db/schema';
 
 export async function load({ request }) {
   const session = await auth.api.getSession({
@@ -18,12 +18,17 @@ export async function load({ request }) {
     return redirect(302, '/sign-in');
   }
 
-  const [collections, createCollectionForm, createBookmarkForm] = await Promise.all([
+  const [collections, bookmarks, createCollectionForm, createBookmarkForm] = await Promise.all([
     db
       .select()
       .from(collection)
       .where(eq(collection.userId, session.user.id))
       .orderBy(desc(collection.updatedAt)),
+    db
+      .select()
+      .from(bookmark)
+      .where(eq(bookmark.userId, session.user.id))
+      .orderBy(desc(bookmark.updatedAt)),
     superValidate(zod4(createCollectionSchema)),
     superValidate(zod4(createBookmarkSchema)),
   ]);
@@ -31,6 +36,7 @@ export async function load({ request }) {
   return {
     session,
     collections,
+    bookmarks,
     createCollectionForm,
     createBookmarkForm,
   };
