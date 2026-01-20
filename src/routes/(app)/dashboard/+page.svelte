@@ -10,13 +10,19 @@
   } from '@lucide/svelte';
   import { format } from 'date-fns';
   import type { InferSelectModel } from 'drizzle-orm';
+  import { toast } from 'svelte-sonner';
+  import { getFlash } from 'sveltekit-flash-message';
+  import type { Infer, SuperValidated } from 'sveltekit-superforms';
 
+  import { page } from '$app/state';
+  import BookmarkManageDialogs from '$lib/components/bookmark-manage-dialogs.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
   import { Button } from '$lib/components/ui/button';
   import * as ButtonGroup from '$lib/components/ui/button-group';
   import * as Card from '$lib/components/ui/card';
   import * as Empty from '$lib/components/ui/empty';
+  import type { DeleteBookmarkSchema, UpdateBookmarkSchema } from '$lib/schemas/bookmark';
   import type { bookmark, collection } from '$lib/server/db/schema';
   import { cn } from '$lib/utils';
 
@@ -26,17 +32,47 @@
     data: {
       collections: InferSelectModel<typeof collection>[];
       bookmarks: InferSelectModel<typeof bookmark>[];
+      updateBookmarkForm: SuperValidated<Infer<UpdateBookmarkSchema>>;
+      deleteBookmarkForm: SuperValidated<Infer<DeleteBookmarkSchema>>;
     };
   } = $props();
 
   let view = $state<'grid' | 'list'>('grid');
+  let dialogs = $state<{ openUpdateDialog: (data: BookmarkWithHost) => void } | null>(null);
+
+  const collectionsById = $derived(
+    Object.fromEntries(data.collections.map((collection) => [collection.id, collection]))
+  );
+
+  const bookmarks = $derived(
+    data.bookmarks.map((bookmark) => ({
+      ...bookmark,
+      host: new URL(bookmark.url).hostname,
+    }))
+  );
+
+  const hasBookmarks = $derived(bookmarks.length > 0);
+
+  const flash = getFlash(page);
+
+  $effect(() => {
+    if (!$flash) {
+      return;
+    }
+
+    toast[$flash.type]($flash.message);
+
+    $flash = undefined;
+  });
 </script>
 
 <section class="flex flex-col gap-4">
   <div class="flex items-center justify-between gap-2">
     <div>
       <h1>All Bookmarks</h1>
-      <p class="text-muted-foreground">You have {data.bookmarks.length} saved bookmarks</p>
+      <p class="text-muted-foreground">
+        You have {data.bookmarks.length} saved bookmarks
+      </p>
     </div>
     <ButtonGroup.Root class="hidden sm:block">
       <Button
@@ -56,15 +92,15 @@
     </ButtonGroup.Root>
   </div>
   <div>
-    {#if data.bookmarks.length === 0}
+    {#if !hasBookmarks}
       <Empty.Root class="py-28 sm:py-56">
         <Empty.Header>
           <Empty.Media variant="icon">
             <Bookmark />
           </Empty.Media>
-          <Empty.Title>No Bookmarks Yet</Empty.Title>
+          <Empty.Title>No Bookmarks</Empty.Title>
           <Empty.Description class="text-pretty">
-            You don't have any bookmarks to show right now. Start a favorite links to see them here!
+            You don't have any bookmarks to show right now
           </Empty.Description>
         </Empty.Header>
       </Empty.Root>
@@ -74,18 +110,20 @@
           'grid grid-cols-1 gap-2',
           view === 'grid' && 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
         )}>
-        {#each data.bookmarks as bookmark (bookmark.id)}
+        {#each bookmarks as bookmark (bookmark.id)}
           <Card.Root class="group not-typography">
             <Card.Header>
               <Card.Title class="flex items-center gap-2">
                 <Avatar.Root class="size-4">
                   <Avatar.Image src={bookmark.favicon} alt={bookmark.title} />
-                  <Avatar.Fallback>{bookmark.title.charAt(0).toUpperCase()}</Avatar.Fallback>
+                  <Avatar.Fallback>
+                    {bookmark.title.charAt(0).toUpperCase()}
+                  </Avatar.Fallback>
                 </Avatar.Root>
                 <p class="line-clamp-1">{bookmark.title}</p>
               </Card.Title>
               <Card.Description>
-                {new URL(bookmark.url).hostname}
+                {bookmark.host}
               </Card.Description>
               <Card.Action class="lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100">
                 <Button
@@ -97,7 +135,10 @@
                   <ExternalLink />
                   <span class="sr-only">Open Bookmark</span>
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onclick={() => dialogs?.openUpdateDialog(bookmark)}>
                   <Settings2 />
                   <span class="sr-only">Manage Bookmark</span>
                 </Button>
@@ -110,8 +151,7 @@
               <Badge variant={bookmark.collectionId ? 'default' : 'outline'}>
                 {#if bookmark.collectionId}
                   <Folders />
-                  {data.collections.find((collection) => collection.id === bookmark.collectionId)
-                    ?.name}
+                  {collectionsById[bookmark.collectionId].name}
                 {:else}
                   <Inbox />
                   Unsorted
@@ -127,3 +167,9 @@
     {/if}
   </div>
 </section>
+
+<BookmarkManageDialogs
+  bind:this={dialogs}
+  collections={data.collections}
+  updateBookmarkForm={data.updateBookmarkForm}
+  deleteBookmarkForm={data.deleteBookmarkForm} />
