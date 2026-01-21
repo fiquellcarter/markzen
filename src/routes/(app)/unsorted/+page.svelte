@@ -91,7 +91,7 @@
         </Empty.Media>
         <Empty.Title>No Bookmarks</Empty.Title>
         <Empty.Description class="text-pretty">
-          Bookmarks not assigned to any collection will appear here
+          Bookmarks not assigned to any collection will appear here.
         </Empty.Description>
       </Empty.Header>
     </Empty.Root>

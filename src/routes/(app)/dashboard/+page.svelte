@@ -100,7 +100,9 @@
           <Bookmark />
         </Empty.Media>
         <Empty.Title>No Bookmarks</Empty.Title>
-        <Empty.Description class="text-pretty">You do not have any bookmarks yet</Empty.Description>
+        <Empty.Description class="text-pretty">
+          You do not have any bookmarks yet.
+        </Empty.Description>
       </Empty.Header>
     </Empty.Root>
   {:else}
