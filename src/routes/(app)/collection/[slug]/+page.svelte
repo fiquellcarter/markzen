@@ -1,5 +1,13 @@
 <script lang="ts">
-  import { LayoutGrid, LayoutList, Settings2 } from '@lucide/svelte';
+  import {
+    Bookmark,
+    ExternalLink,
+    Folders,
+    LayoutGrid,
+    LayoutList,
+    Settings2,
+  } from '@lucide/svelte';
+  import { format } from 'date-fns';
   import type { InferSelectModel } from 'drizzle-orm';
   import { toast } from 'svelte-sonner';
   import { getFlash } from 'sveltekit-flash-message';
@@ -7,35 +15,50 @@
   import { zod4 } from 'sveltekit-superforms/adapters';
 
   import { page } from '$app/state';
+  import BookmarkManageDialogs from '$lib/components/bookmark-manage-dialogs.svelte';
   import * as AlertDialog from '$lib/components/ui/alert-dialog';
+  import * as Avatar from '$lib/components/ui/avatar';
+  import { Badge } from '$lib/components/ui/badge';
   import { Button, buttonVariants } from '$lib/components/ui/button';
   import * as ButtonGroup from '$lib/components/ui/button-group';
+  import * as Card from '$lib/components/ui/card';
   import * as Dialog from '$lib/components/ui/dialog';
+  import * as Empty from '$lib/components/ui/empty';
   import * as Field from '$lib/components/ui/field';
   import { Input } from '$lib/components/ui/input';
   import { Separator } from '$lib/components/ui/separator';
   import { Spinner } from '$lib/components/ui/spinner';
   import { Textarea } from '$lib/components/ui/textarea';
+  import type { DeleteBookmarkSchema, UpdateBookmarkSchema } from '$lib/schemas/bookmark';
   import {
     deleteCollectionSchema,
     updateCollectionSchema,
     type DeleteCollectionSchema,
     type UpdateCollectionSchema,
   } from '$lib/schemas/collection';
-  import type { collection } from '$lib/server/db/schema';
+  import type { bookmark, collection } from '$lib/server/db/schema';
+  import { cn } from '$lib/utils';
 
   let {
     data,
   }: {
     data: {
       collection: InferSelectModel<typeof collection>;
+      collections: InferSelectModel<typeof collection>[];
+      bookmarks: InferSelectModel<typeof bookmark>[];
       updateCollectionForm: SuperValidated<Infer<UpdateCollectionSchema>>;
       deleteCollectionForm: SuperValidated<Infer<DeleteCollectionSchema>>;
+      updateBookmarkForm: SuperValidated<Infer<UpdateBookmarkSchema>>;
+      deleteBookmarkForm: SuperValidated<Infer<DeleteBookmarkSchema>>;
     };
   } = $props();
 
+  let view = $state<'grid' | 'list'>('grid');
   let isUpdateOpen = $state(false);
   let isDeleteOpen = $state(false);
+  let dialogs = $state<{
+    openUpdateDialog: (data: BookmarkWithHost) => void;
+  } | null>(null);
 
   // svelte-ignore state_referenced_locally
   const {
@@ -67,6 +90,17 @@
     },
   });
 
+  const collectionBookmarks = $derived(
+    data.bookmarks
+      .filter((bookmark) => bookmark.collectionId === data.collection.id)
+      .map((bookmark) => ({
+        ...bookmark,
+        host: new URL(bookmark.url).hostname,
+      }))
+  );
+
+  const hasBookmarks = $derived(collectionBookmarks.length > 0);
+
   const flash = getFlash(page);
 
   $effect(() => {
@@ -80,7 +114,7 @@
   });
 </script>
 
-<section>
+<section class="flex flex-col gap-4">
   <div class="flex items-center justify-between gap-2">
     <div>
       <h1>{data.collection.name}</h1>
@@ -88,16 +122,22 @@
         {#if data.collection.description}
           <span>{data.collection.description} •</span>
         {/if}
-        <span>2 saved bookmarks</span>
+        <span>You have {collectionBookmarks.length} saved bookmarks</span>
       </p>
     </div>
-    <div class="flex flex-col-reverse items-end gap-2 sm:h-6 sm:flex-row sm:items-center">
-      <ButtonGroup.Root>
-        <Button variant="default" size="icon">
+    <div class="sm:flex sm:h-6 sm:items-center sm:gap-2">
+      <ButtonGroup.Root class="hidden sm:block">
+        <Button
+          variant={view === 'grid' ? 'default' : 'outline'}
+          size="icon"
+          onclick={() => (view = 'grid')}>
           <LayoutGrid />
           <span class="sr-only">Grid View</span>
         </Button>
-        <Button variant="outline" size="icon">
+        <Button
+          variant={view === 'list' ? 'default' : 'outline'}
+          size="icon"
+          onclick={() => (view = 'list')}>
           <LayoutList />
           <span class="sr-only">List View</span>
         </Button>
@@ -111,7 +151,7 @@
         <Dialog.Content>
           <Dialog.Header>
             <Dialog.Title>Edit Collection</Dialog.Title>
-            <Dialog.Description>Update the details or remove this collection.</Dialog.Description>
+            <Dialog.Description>Update the details or delete this collection.</Dialog.Description>
           </Dialog.Header>
           <form
             id="update-collection-form"
@@ -134,9 +174,7 @@
                   {#if $updateErrors.name}
                     <Field.FieldError>{$updateErrors.name}</Field.FieldError>
                   {:else}
-                    <Field.Description>
-                      A clear and recognizable name for this collection.
-                    </Field.Description>
+                    <Field.Description>A recognizable name for this collection.</Field.Description>
                   {/if}
                 </Field.Field>
                 <Field.Field>
@@ -151,9 +189,7 @@
                   {#if $updateErrors.description}
                     <Field.FieldError>{$updateErrors.description}</Field.FieldError>
                   {:else}
-                    <Field.Description>
-                      Optional context to help you remember what this collection is for.
-                    </Field.Description>
+                    <Field.Description>Additional context for this collection.</Field.Description>
                   {/if}
                 </Field.Field>
               </Field.Group>
@@ -181,6 +217,74 @@
       </Dialog.Root>
     </div>
   </div>
+  {#if !hasBookmarks}
+    <Empty.Root class="py-28 sm:py-56">
+      <Empty.Header>
+        <Empty.Media variant="icon">
+          <Bookmark />
+        </Empty.Media>
+        <Empty.Title>No Bookmarks</Empty.Title>
+        <Empty.Description class="text-pretty">
+          This collection does not have any bookmarks yet.
+        </Empty.Description>
+      </Empty.Header>
+    </Empty.Root>
+  {:else}
+    <div
+      class={cn(
+        'grid grid-cols-1 gap-2',
+        view === 'grid' && 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+      )}>
+      {#each collectionBookmarks as bookmark (bookmark.id)}
+        <Card.Root class="group not-typography">
+          <Card.Header>
+            <Card.Title class="flex items-center gap-2">
+              <Avatar.Root class="size-4">
+                <Avatar.Image src={bookmark.favicon} alt={bookmark.title} />
+                <Avatar.Fallback>
+                  {bookmark.title.charAt(0).toUpperCase()}
+                </Avatar.Fallback>
+              </Avatar.Root>
+              <p class="line-clamp-1">{bookmark.title}</p>
+            </Card.Title>
+            <Card.Description>
+              {bookmark.host}
+            </Card.Description>
+            <Card.Action class="lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100">
+              <Button
+                href={bookmark.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="ghost"
+                size="icon">
+                <ExternalLink />
+                <span class="sr-only">Open Bookmark</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onclick={() => dialogs?.openUpdateDialog(bookmark)}>
+                <Settings2 />
+                <span class="sr-only">Manage Bookmark</span>
+              </Button>
+            </Card.Action>
+          </Card.Header>
+          <Card.Content>
+            <p class="line-clamp-2">{bookmark.description}</p>
+          </Card.Content>
+          <Card.Footer class="mt-auto flex items-center justify-between gap-2">
+            <Badge variant="secondary">
+              <Folders />
+              {data.collection.name}
+            </Badge>
+            <p class="line-clamp-1 text-sm text-muted-foreground">
+              {format(bookmark.updatedAt, 'PP')}
+            </p>
+          </Card.Footer>
+        </Card.Root>
+      {/each}
+    </div>
+  {/if}
 </section>
 
 <AlertDialog.Root bind:open={isDeleteOpen}>
@@ -188,8 +292,8 @@
     <AlertDialog.Header>
       <AlertDialog.Title>Delete this collection?</AlertDialog.Title>
       <AlertDialog.Description>
-        This action is permanent. The collection and all associated bookmarks will be removed and
-        cannot be recovered.
+        This action is permanent. The collection and all its bookmarks will be removed and cannot be
+        recovered.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <form id="delete-collection-form" action="/collection/delete" method="POST" use:deleteEnhance>
@@ -210,3 +314,9 @@
     </AlertDialog.Footer>
   </AlertDialog.Content>
 </AlertDialog.Root>
+
+<BookmarkManageDialogs
+  bind:this={dialogs}
+  collections={data.collections}
+  updateBookmarkForm={data.updateBookmarkForm}
+  deleteBookmarkForm={data.deleteBookmarkForm} />

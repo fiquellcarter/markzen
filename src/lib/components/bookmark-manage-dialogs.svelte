@@ -110,8 +110,8 @@
 <Dialog.Root bind:open={isUpdateOpen}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Edit bookmark</Dialog.Title>
-      <Dialog.Description>Update the details or remove this bookmark</Dialog.Description>
+      <Dialog.Title>Edit Bookmark</Dialog.Title>
+      <Dialog.Description>Update the details or delete this bookmark.</Dialog.Description>
     </Dialog.Header>
     <form id="update-bookmark-form" action="/bookmark/update" method="POST" use:updateEnhance>
       <input type="hidden" name="id" bind:value={$updateForm.id} />
@@ -124,11 +124,14 @@
               type="url"
               id="url"
               name="url"
+              placeholder="https://example.com"
               aria-invalid={$updateErrors.url ? 'true' : undefined}
               bind:value={$updateForm.url}
               {...$updateConstraints.url} />
             {#if $updateErrors.url}
               <Field.FieldError>{$updateErrors.url}</Field.FieldError>
+            {:else}
+              <Field.Description>The URL of the page you want to bookmark.</Field.Description>
             {/if}
           </Field.Field>
           <Field.Field>
@@ -137,11 +140,14 @@
               type="text"
               id="title"
               name="title"
+              placeholder="Page Title"
               aria-invalid={$updateErrors.title ? 'true' : undefined}
               bind:value={$updateForm.title}
               {...$updateConstraints.title} />
             {#if $updateErrors.title}
               <Field.FieldError>{$updateErrors.title}</Field.FieldError>
+            {:else}
+              <Field.Description>The title of the bookmark.</Field.Description>
             {/if}
           </Field.Field>
           <Field.Field>
@@ -149,11 +155,14 @@
             <Textarea
               id="description"
               name="description"
+              placeholder="Notes about this bookmark"
               aria-invalid={$updateErrors.description ? 'true' : undefined}
               bind:value={$updateForm.description}
               {...$updateConstraints.description} />
             {#if $updateErrors.description}
               <Field.FieldError>{$updateErrors.description}</Field.FieldError>
+            {:else}
+              <Field.Description>Additional context for this bookmark.</Field.Description>
             {/if}
           </Field.Field>
           <Field.Field>
@@ -169,13 +178,14 @@
                 {/each}
               </Select.Content>
             </Select.Root>
+            <Field.Description>Choose a collection for this bookmark.</Field.Description>
           </Field.Field>
         </Field.Group>
       </Field.Set>
     </form>
     <Dialog.Footer class="flex-col pt-6 sm:justify-between">
       <div>
-        <Button variant="destructive" onclick={openDeleteDialog}>Delete bookmark</Button>
+        <Button variant="destructive" onclick={openDeleteDialog}>Delete Bookmark</Button>
       </div>
       <div class="flex items-center gap-2">
         <Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
@@ -183,7 +193,7 @@
           {#if $updateSubmitting}
             <Spinner />
           {/if}
-          Save changes
+          Save Changes
         </Button>
       </div>
     </Dialog.Footer>
@@ -195,7 +205,7 @@
     <AlertDialog.Header>
       <AlertDialog.Title>Delete this bookmark?</AlertDialog.Title>
       <AlertDialog.Description>
-        The bookmark will be removed and cannot be recovered
+        This action is permanent. The bookmark will be removed and cannot be recovered.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <form id="delete-bookmark-form" action="/bookmark/delete" method="POST" use:deleteEnhance>
@@ -211,7 +221,7 @@
         {#if $deleteSubmitting}
           <Spinner />
         {/if}
-        Delete bookmark
+        Delete Bookmark
       </AlertDialog.Action>
     </AlertDialog.Footer>
   </AlertDialog.Content>

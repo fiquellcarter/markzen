@@ -27,7 +27,9 @@ export async function extractMetadata(url: string) {
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
   const response = await fetch(url, {
-    headers: { 'User-Agent': USER_AGENT },
+    headers: {
+      'User-Agent': USER_AGENT,
+    },
     signal: controller.signal,
   });
 
@@ -51,5 +53,9 @@ export async function extractMetadata(url: string) {
   const faviconHref = $('link[rel="icon"]').attr('href') ?? '/favicon.ico';
   const favicon = new URL(faviconHref, url).href;
 
-  return { title, description, favicon };
+  return {
+    title,
+    description,
+    favicon,
+  };
 }

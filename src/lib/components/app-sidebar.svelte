@@ -66,9 +66,14 @@
     },
   });
 
+  const collectionsById = $derived(
+    Object.fromEntries(data.collections.map((collection) => [collection.id, collection]))
+  );
+
   const collectionLabel = $derived(
-    data.collections.find((collection) => collection.id === selectedCollectionId)?.name ??
-      'Unsorted'
+    selectedCollectionId
+      ? (collectionsById[selectedCollectionId]?.name ?? 'Select a collection')
+      : 'Unsorted'
   );
 
   const items = [
@@ -79,8 +84,6 @@
   const flash = getFlash(page);
 
   $effect(() => {
-    $bookmarkForm.collectionId = selectedCollectionId === '' ? null : selectedCollectionId;
-
     if (!$flash) {
       return;
     }
@@ -88,6 +91,10 @@
     toast[$flash.type]($flash.message);
 
     $flash = undefined;
+  });
+
+  $effect(() => {
+    $bookmarkForm.collectionId = selectedCollectionId === '' ? null : selectedCollectionId;
   });
 </script>
 

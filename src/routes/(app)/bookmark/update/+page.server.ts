@@ -13,7 +13,9 @@ import { delay } from '$lib/utils';
 import type { Actions } from './$types';
 
 export async function load() {
-  return { form: await superValidate(zod4(updateBookmarkSchema)) };
+  return {
+    form: await superValidate(zod4(updateBookmarkSchema)),
+  };
 }
 
 export const actions: Actions = {

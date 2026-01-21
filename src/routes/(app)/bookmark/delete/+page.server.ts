@@ -12,7 +12,9 @@ import { delay } from '$lib/utils';
 import type { Actions } from './$types';
 
 export async function load() {
-  return { form: await superValidate(zod4(deleteBookmarkSchema)) };
+  return {
+    form: await superValidate(zod4(deleteBookmarkSchema)),
+  };
 }
 
 export const actions: Actions = {

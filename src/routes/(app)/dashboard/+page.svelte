@@ -38,7 +38,9 @@
   } = $props();
 
   let view = $state<'grid' | 'list'>('grid');
-  let dialogs = $state<{ openUpdateDialog: (data: BookmarkWithHost) => void } | null>(null);
+  let dialogs = $state<{
+    openUpdateDialog: (data: BookmarkWithHost) => void;
+  } | null>(null);
 
   const collectionsById = $derived(
     Object.fromEntries(data.collections.map((collection) => [collection.id, collection]))
@@ -91,81 +93,77 @@
       </Button>
     </ButtonGroup.Root>
   </div>
-  <div>
-    {#if !hasBookmarks}
-      <Empty.Root class="py-28 sm:py-56">
-        <Empty.Header>
-          <Empty.Media variant="icon">
-            <Bookmark />
-          </Empty.Media>
-          <Empty.Title>No Bookmarks</Empty.Title>
-          <Empty.Description class="text-pretty">
-            You don't have any bookmarks to show right now
-          </Empty.Description>
-        </Empty.Header>
-      </Empty.Root>
-    {:else}
-      <div
-        class={cn(
-          'grid grid-cols-1 gap-2',
-          view === 'grid' && 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-        )}>
-        {#each bookmarks as bookmark (bookmark.id)}
-          <Card.Root class="group not-typography">
-            <Card.Header>
-              <Card.Title class="flex items-center gap-2">
-                <Avatar.Root class="size-4">
-                  <Avatar.Image src={bookmark.favicon} alt={bookmark.title} />
-                  <Avatar.Fallback>
-                    {bookmark.title.charAt(0).toUpperCase()}
-                  </Avatar.Fallback>
-                </Avatar.Root>
-                <p class="line-clamp-1">{bookmark.title}</p>
-              </Card.Title>
-              <Card.Description>
-                {bookmark.host}
-              </Card.Description>
-              <Card.Action class="lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100">
-                <Button
-                  href={bookmark.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="ghost"
-                  size="icon">
-                  <ExternalLink />
-                  <span class="sr-only">Open Bookmark</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onclick={() => dialogs?.openUpdateDialog(bookmark)}>
-                  <Settings2 />
-                  <span class="sr-only">Manage Bookmark</span>
-                </Button>
-              </Card.Action>
-            </Card.Header>
-            <Card.Content>
-              <p class="line-clamp-2">{bookmark.description}</p>
-            </Card.Content>
-            <Card.Footer class="mt-auto flex items-center justify-between gap-2">
-              <Badge variant={bookmark.collectionId ? 'default' : 'outline'}>
-                {#if bookmark.collectionId}
-                  <Folders />
-                  {collectionsById[bookmark.collectionId].name}
-                {:else}
-                  <Inbox />
-                  Unsorted
-                {/if}
-              </Badge>
-              <p class="line-clamp-1 text-sm text-muted-foreground">
-                {format(bookmark.updatedAt, 'PP')}
-              </p>
-            </Card.Footer>
-          </Card.Root>
-        {/each}
-      </div>
-    {/if}
-  </div>
+  {#if !hasBookmarks}
+    <Empty.Root class="py-28 sm:py-56">
+      <Empty.Header>
+        <Empty.Media variant="icon">
+          <Bookmark />
+        </Empty.Media>
+        <Empty.Title>No Bookmarks</Empty.Title>
+        <Empty.Description class="text-pretty">You do not have any bookmarks yet</Empty.Description>
+      </Empty.Header>
+    </Empty.Root>
+  {:else}
+    <div
+      class={cn(
+        'grid grid-cols-1 gap-2',
+        view === 'grid' && 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+      )}>
+      {#each bookmarks as bookmark (bookmark.id)}
+        <Card.Root class="group not-typography">
+          <Card.Header>
+            <Card.Title class="flex items-center gap-2">
+              <Avatar.Root class="size-4">
+                <Avatar.Image src={bookmark.favicon} alt={bookmark.title} />
+                <Avatar.Fallback>
+                  {bookmark.title.charAt(0).toUpperCase()}
+                </Avatar.Fallback>
+              </Avatar.Root>
+              <p class="line-clamp-1">{bookmark.title}</p>
+            </Card.Title>
+            <Card.Description>
+              {bookmark.host}
+            </Card.Description>
+            <Card.Action class="lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100">
+              <Button
+                href={bookmark.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="ghost"
+                size="icon">
+                <ExternalLink />
+                <span class="sr-only">Open Bookmark</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onclick={() => dialogs?.openUpdateDialog(bookmark)}>
+                <Settings2 />
+                <span class="sr-only">Manage Bookmark</span>
+              </Button>
+            </Card.Action>
+          </Card.Header>
+          <Card.Content>
+            <p class="line-clamp-2">{bookmark.description}</p>
+          </Card.Content>
+          <Card.Footer class="mt-auto flex items-center justify-between gap-2">
+            <Badge variant={bookmark.collectionId ? 'secondary' : 'outline'}>
+              {#if bookmark.collectionId}
+                <Folders />
+                {collectionsById[bookmark.collectionId].name}
+              {:else}
+                <Inbox />
+                Unsorted
+              {/if}
+            </Badge>
+            <p class="line-clamp-1 text-sm text-muted-foreground">
+              {format(bookmark.updatedAt, 'PP')}
+            </p>
+          </Card.Footer>
+        </Card.Root>
+      {/each}
+    </div>
+  {/if}
 </section>
 
 <BookmarkManageDialogs
