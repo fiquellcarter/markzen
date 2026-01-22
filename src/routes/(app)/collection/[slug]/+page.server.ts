@@ -75,7 +75,7 @@ export const actions: Actions = {
       `/collection/${slug}`,
       {
         type: 'success',
-        message: 'Collection updated successfully',
+        message: 'Collection updated',
       },
       cookies
     );
@@ -96,7 +96,7 @@ export const actions: Actions = {
       '/dashboard',
       {
         type: 'success',
-        message: 'Collection deleted successfully',
+        message: 'Collection deleted',
       },
       cookies
     );

@@ -32,8 +32,8 @@
   let { data } = $props();
 
   let view = $state<'grid' | 'list'>('grid');
-  let isUpdateOpen = $state(false);
-  let isDeleteOpen = $state(false);
+  let isUpdateDialogOpen = $state(false);
+  let isDeleteDialogOpen = $state(false);
   let dialogs = $state<{
     openUpdateDialog: (data: BookmarkWithHost) => void;
   } | null>(null);
@@ -50,7 +50,7 @@
     validators: zod4(updateCollectionSchema),
     onResult({ result }) {
       if (result.type === 'redirect') {
-        isUpdateOpen = false;
+        isUpdateDialogOpen = false;
       }
     },
   });
@@ -65,7 +65,7 @@
     validators: zod4(deleteCollectionSchema),
     onResult({ result }) {
       if (result.type === 'redirect') {
-        isDeleteOpen = false;
+        isDeleteDialogOpen = false;
       }
     },
   });
@@ -90,7 +90,7 @@
         {#if data.collection.description}
           <span>{data.collection.description} •</span>
         {/if}
-        <span>You have {collectionBookmarks.length} saved bookmarks.</span>
+        <span>You have {collectionBookmarks.length} bookmark(s) saved.</span>
       </p>
     </div>
     <div class="sm:flex sm:h-6 sm:items-center sm:gap-2">
@@ -111,7 +111,7 @@
         </Button>
       </ButtonGroup.Root>
       <Separator orientation="vertical" class="hidden sm:block" />
-      <Button variant="outline" size="icon" onclick={() => (isUpdateOpen = true)}>
+      <Button variant="outline" size="icon" onclick={() => (isUpdateDialogOpen = true)}>
         <Settings2 />
         <span class="sr-only">Manage Collection</span>
       </Button>
@@ -125,7 +125,7 @@
         </Empty.Media>
         <Empty.Title>No Bookmarks</Empty.Title>
         <Empty.Description class="text-pretty">
-          This collection does not have any bookmarks yet.
+          This collection doesn't have any bookmarks yet.
         </Empty.Description>
       </Empty.Header>
     </Empty.Root>
@@ -158,7 +158,7 @@
                 variant="ghost"
                 size="icon">
                 <ExternalLink />
-                <span class="sr-only">Open Bookmark</span>
+                <span class="sr-only">Open Link</span>
               </Button>
               <Button
                 variant="ghost"
@@ -187,11 +187,11 @@
   {/if}
 </section>
 
-<Dialog.Root bind:open={isUpdateOpen}>
+<Dialog.Root bind:open={isUpdateDialogOpen}>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Edit Collection</Dialog.Title>
-      <Dialog.Description>Update the details or delete this collection.</Dialog.Description>
+      <Dialog.Description>Rename this collection or add a description.</Dialog.Description>
     </Dialog.Header>
     <form id="update-form" action="?/update" method="POST" use:updateEnhance>
       <input type="hidden" name="id" bind:value={$updateForm.id} />
@@ -203,14 +203,14 @@
               type="text"
               id="name"
               name="name"
-              placeholder="UI Inspiration"
+              placeholder="e.g., UI Inspiration"
               aria-invalid={$updateErrors.name ? 'true' : undefined}
               bind:value={$updateForm.name}
               {...$updateConstraints.name} />
             {#if $updateErrors.name}
               <Field.FieldError>{$updateErrors.name}</Field.FieldError>
             {:else}
-              <Field.Description>A recognizable name for this collection.</Field.Description>
+              <Field.Description>A memorable name for this collection.</Field.Description>
             {/if}
           </Field.Field>
           <Field.Field>
@@ -218,14 +218,14 @@
             <Textarea
               id="description"
               name="description"
-              placeholder="Optional notes about this collection"
+              placeholder="Add details (optional)"
               aria-invalid={$updateErrors.description ? 'true' : undefined}
               bind:value={$updateForm.description}
               {...$updateConstraints.description} />
             {#if $updateErrors.description}
               <Field.FieldError>{$updateErrors.description}</Field.FieldError>
             {:else}
-              <Field.Description>Additional context for this collection.</Field.Description>
+              <Field.Description>What this collection is for (optional).</Field.Description>
             {/if}
           </Field.Field>
         </Field.Group>
@@ -235,7 +235,7 @@
       <div>
         <Button
           variant="destructive"
-          onclick={() => ((isDeleteOpen = true), (isUpdateOpen = false))}>
+          onclick={() => ((isDeleteDialogOpen = true), (isUpdateDialogOpen = false))}>
           Delete Collection
         </Button>
       </div>
@@ -252,20 +252,20 @@
   </Dialog.Content>
 </Dialog.Root>
 
-<AlertDialog.Root bind:open={isDeleteOpen}>
+<AlertDialog.Root bind:open={isDeleteDialogOpen}>
   <AlertDialog.Content escapeKeydownBehavior="ignore">
     <AlertDialog.Header>
       <AlertDialog.Title>Delete this collection?</AlertDialog.Title>
       <AlertDialog.Description>
-        This action is permanent. The collection and all its bookmarks will be removed and cannot be
-        recovered.
+        This will remove the collection and its bookmarks. You can always add them to another
+        collection later.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <form id="delete-form" action="?/delete" method="POST" use:deleteEnhance>
       <input type="hidden" name="id" bind:value={$deleteForm.id} />
     </form>
     <AlertDialog.Footer>
-      <AlertDialog.Cancel onclick={() => (isUpdateOpen = true)}>Cancel</AlertDialog.Cancel>
+      <AlertDialog.Cancel onclick={() => (isUpdateDialogOpen = true)}>Cancel</AlertDialog.Cancel>
       <AlertDialog.Action
         type="submit"
         form="delete-form"

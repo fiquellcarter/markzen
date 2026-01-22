@@ -40,7 +40,7 @@ export const actions: Actions = {
       `/collection/${slug}`,
       {
         type: 'success',
-        message: 'Collection created successfully',
+        message: 'Collection created',
       },
       cookies
     );

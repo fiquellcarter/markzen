@@ -49,7 +49,7 @@ export const actions: Actions = {
     setFlash(
       {
         type: 'success',
-        message: 'Bookmark deleted successfully',
+        message: 'Bookmark deleted',
       },
       cookies
     );

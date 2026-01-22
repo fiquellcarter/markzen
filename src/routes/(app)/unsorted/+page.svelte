@@ -36,7 +36,7 @@
     <div>
       <h1>Unsorted</h1>
       <p class="text-muted-foreground">
-        You have {unsortedBookmarks.length} saved bookmarks.
+        You have {unsortedBookmarks.length} bookmark(s) not in any collection.
       </p>
     </div>
     <ButtonGroup.Root class="hidden sm:block">
@@ -62,9 +62,9 @@
         <Empty.Media variant="icon">
           <Bookmark />
         </Empty.Media>
-        <Empty.Title>No Bookmarks</Empty.Title>
+        <Empty.Title>All Sorted</Empty.Title>
         <Empty.Description class="text-pretty">
-          Bookmarks not assigned to any collection will appear here.
+          Bookmarks without a collection appear here.
         </Empty.Description>
       </Empty.Header>
     </Empty.Root>
@@ -97,7 +97,7 @@
                 variant="ghost"
                 size="icon">
                 <ExternalLink />
-                <span class="sr-only">Open Bookmark</span>
+                <span class="sr-only">Open Link</span>
               </Button>
               <Button
                 variant="ghost"

@@ -19,25 +19,25 @@
 <section class="mx-auto flex max-w-3xl flex-col gap-14">
   <div>
     <h1>Profile</h1>
-    <p class="text-muted-foreground">Update your basic account information and settings.</p>
+    <p class="text-muted-foreground">Manage your account settings.</p>
   </div>
   <form method="POST" use:enhance>
     <Field.Set>
       <Field.Group>
         <Field.Field orientation="responsive">
           <Field.Content>
-            <Field.Label for="name">Name</Field.Label>
+            <Field.Label for="name">Display Name</Field.Label>
             {#if $errors.name}
               <Field.FieldError>{$errors.name}</Field.FieldError>
             {:else}
-              <Field.Description>Update your display name.</Field.Description>
+              <Field.Description>Your display name.</Field.Description>
             {/if}
           </Field.Content>
           <Input
             type="text"
             id="name"
             name="name"
-            placeholder="Your Name"
+            placeholder="Your name"
             class="min-w-xs"
             aria-invalid={$errors.name ? 'true' : undefined}
             bind:value={$form.name}
@@ -52,13 +52,13 @@
         <Field.Field orientation="responsive">
           <Field.Content>
             <Field.Label for="email">Email</Field.Label>
-            <Field.Description>Your email address cannot be changed.</Field.Description>
+            <Field.Description>Your email can't be changed.</Field.Description>
           </Field.Content>
           <Input
             type="email"
             id="email"
             name="email"
-            placeholder="Your Email"
+            placeholder="your@email.com"
             disabled
             class="min-w-xs"
             value={data.session?.user.email} />

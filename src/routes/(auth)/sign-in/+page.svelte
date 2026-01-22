@@ -22,7 +22,7 @@
       });
 
       if (error) {
-        toast.error('Failed to sign in');
+        toast.error('Could not sign in');
       }
     } catch (error) {
       if (error instanceof APIError) {
@@ -36,7 +36,7 @@
 
 <Card.Root class="w-full max-w-md">
   <Card.Header class="text-center">
-    <Card.Title class="text-xl">Sign in to Markzen</Card.Title>
+    <Card.Title class="text-xl">Welcome to Markzen</Card.Title>
     <Card.Description class="text-pretty">
       Sign in with GitHub to save and organize your links.
     </Card.Description>
@@ -62,8 +62,7 @@
   </Card.Content>
   <Card.Footer class="justify-center border-t">
     <p class="text-xs text-pretty text-muted-foreground">
-      By signing in, you agree to our <a href="##">Terms of Service</a> and
-      <a href="##">Privacy Policy</a>.
+      By continuing, you agree to our <a href="##">Terms</a> and <a href="##">Privacy Policy</a>.
     </p>
   </Card.Footer>
 </Card.Root>

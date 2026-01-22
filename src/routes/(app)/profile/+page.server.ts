@@ -39,7 +39,7 @@ export const actions: Actions = {
     setFlash(
       {
         type: 'success',
-        message: 'Name updated successfully',
+        message: 'Name updated',
       },
       cookies
     );

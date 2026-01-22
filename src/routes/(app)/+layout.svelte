@@ -29,7 +29,7 @@
       const { error } = await auth.signOut();
 
       if (error) {
-        toast.error('Failed to sign out');
+        toast.error('Could not sign out');
 
         return;
       }

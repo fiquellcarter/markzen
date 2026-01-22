@@ -46,7 +46,7 @@
     <div>
       <h1>All Bookmarks</h1>
       <p class="text-muted-foreground">
-        You have {bookmarks.length} saved bookmarks.
+        You have {bookmarks.length} bookmark(s) saved.
       </p>
     </div>
     <ButtonGroup.Root class="hidden sm:block">
@@ -72,9 +72,9 @@
         <Empty.Media variant="icon">
           <Bookmark />
         </Empty.Media>
-        <Empty.Title>No Bookmarks</Empty.Title>
+        <Empty.Title>No Bookmarks Yet</Empty.Title>
         <Empty.Description class="text-pretty">
-          You do not have any bookmarks yet.
+          Save your first link to get started.
         </Empty.Description>
       </Empty.Header>
     </Empty.Root>
@@ -107,7 +107,7 @@
                 variant="ghost"
                 size="icon">
                 <ExternalLink />
-                <span class="sr-only">Open Bookmark</span>
+                <span class="sr-only">Open Link</span>
               </Button>
               <Button
                 variant="ghost"

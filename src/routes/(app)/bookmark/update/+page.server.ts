@@ -61,7 +61,7 @@ export const actions: Actions = {
     setFlash(
       {
         type: 'success',
-        message: 'Bookmark updated successfully',
+        message: 'Bookmark updated',
       },
       cookies
     );

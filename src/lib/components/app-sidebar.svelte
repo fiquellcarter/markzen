@@ -30,8 +30,8 @@
     createBookmarkForm: SuperValidated<Infer<CreateBookmarkSchema>>;
   } = $props();
 
-  let isCollectionOpen = $state(false);
-  let isBookmarkOpen = $state(false);
+  let isCreateCollectionDialogOpen = $state(false);
+  let isCreateBookmarkDialogOpen = $state(false);
   let selectedCollectionId = $state('');
 
   // svelte-ignore state_referenced_locally
@@ -46,7 +46,7 @@
     validators: zod4(createCollectionSchema),
     onResult({ result }) {
       if (result.type === 'redirect') {
-        isCollectionOpen = false;
+        isCreateCollectionDialogOpen = false;
       }
     },
   });
@@ -63,7 +63,7 @@
     validators: zod4(createBookmarkSchema),
     onResult({ result }) {
       if (result.type === 'success') {
-        isBookmarkOpen = false;
+        isCreateBookmarkDialogOpen = false;
       }
     },
   });
@@ -74,7 +74,7 @@
 
   const collectionLabel = $derived(
     selectedCollectionId
-      ? (collectionsById[selectedCollectionId]?.name ?? 'Select a collection')
+      ? (collectionsById[selectedCollectionId]?.name ?? 'Choose a collection')
       : 'Unsorted'
   );
 
@@ -136,7 +136,7 @@
     </Sidebar.Group>
     <Sidebar.Group>
       <Sidebar.GroupLabel>Your Collections</Sidebar.GroupLabel>
-      <Sidebar.GroupAction onclick={() => (isCollectionOpen = true)}>
+      <Sidebar.GroupAction onclick={() => (isCreateCollectionDialogOpen = true)}>
         <Plus />
         <span class="sr-only">Create Collection</span>
       </Sidebar.GroupAction>
@@ -164,7 +164,7 @@
         <Sidebar.MenuButton
           variant="outline"
           tooltipContent="Add Bookmark"
-          onclick={() => (isBookmarkOpen = true)}>
+          onclick={() => (isCreateBookmarkDialogOpen = true)}>
           <Plus />
           Add Bookmark
         </Sidebar.MenuButton>
@@ -173,11 +173,13 @@
   </Sidebar.Footer>
 </Sidebar.Root>
 
-<Dialog.Root bind:open={isCollectionOpen}>
+<Dialog.Root bind:open={isCreateCollectionDialogOpen}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Create Collection</Dialog.Title>
-      <Dialog.Description>Create a new collection to organize your bookmarks.</Dialog.Description>
+      <Dialog.Title>New Collection</Dialog.Title>
+      <Dialog.Description>
+        Group your bookmarks into collections to stay organized.
+      </Dialog.Description>
     </Dialog.Header>
     <form id="collection-form" action="/collection/create" method="POST" use:collectionEnhance>
       <Field.Set>
@@ -188,16 +190,14 @@
               type="text"
               id="name"
               name="name"
-              placeholder="UI Inspiration"
+              placeholder="e.g., UI Inspiration"
               aria-invalid={$collectionErrors.name ? 'true' : undefined}
               bind:value={$collectionForm.name}
               {...$collectionConstraints.name} />
             {#if $collectionErrors.name}
               <Field.FieldError>{$collectionErrors.name}</Field.FieldError>
             {:else}
-              <Field.Description>
-                A clear and recognizable name for this collection.
-              </Field.Description>
+              <Field.Description>A memorable name for this collection.</Field.Description>
             {/if}
           </Field.Field>
           <Field.Field>
@@ -205,16 +205,14 @@
             <Textarea
               id="description"
               name="description"
-              placeholder="Optional notes about this collection"
+              placeholder="Add details (optional)"
               aria-invalid={$collectionErrors.description ? 'true' : undefined}
               bind:value={$collectionForm.description}
               {...$collectionConstraints.description} />
             {#if $collectionErrors.description}
               <Field.FieldError>{$collectionErrors.description}</Field.FieldError>
             {:else}
-              <Field.Description>
-                Optional context to help you remember what this collection is for.
-              </Field.Description>
+              <Field.Description>What this collection is for (optional).</Field.Description>
             {/if}
           </Field.Field>
         </Field.Group>
@@ -232,11 +230,11 @@
   </Dialog.Content>
 </Dialog.Root>
 
-<Dialog.Root bind:open={isBookmarkOpen}>
+<Dialog.Root bind:open={isCreateBookmarkDialogOpen}>
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Create Bookmark</Dialog.Title>
-      <Dialog.Description>Add a new bookmark to your collection.</Dialog.Description>
+      <Dialog.Title>New Bookmark</Dialog.Title>
+      <Dialog.Description>Save a link to access it later.</Dialog.Description>
     </Dialog.Header>
     <form id="bookmark-form" action="/bookmark/create" method="POST" use:bookmarkEnhance>
       <input type="hidden" name="collectionId" bind:value={$bookmarkForm.collectionId} />
@@ -255,7 +253,7 @@
             {#if $bookmarkErrors.url}
               <Field.FieldError>{$bookmarkErrors.url}</Field.FieldError>
             {:else}
-              <Field.Description>The URL of the page you want to bookmark.</Field.Description>
+              <Field.Description>The link you want to save.</Field.Description>
             {/if}
           </Field.Field>
           <Field.Field>
@@ -271,7 +269,7 @@
                 {/each}
               </Select.Content>
             </Select.Root>
-            <Field.Description>Choose a collection for this bookmark.</Field.Description>
+            <Field.Description>Pick a collection for this bookmark.</Field.Description>
           </Field.Field>
         </Field.Group>
       </Field.Set>
@@ -282,7 +280,7 @@
         {#if $bookmarkSubmitting}
           <Spinner />
         {/if}
-        Create Bookmark
+        Save Bookmark
       </Button>
     </Dialog.Footer>
   </Dialog.Content>
