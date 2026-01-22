@@ -2,6 +2,7 @@
   import { Bookmark, ExternalLink, Inbox, LayoutGrid, LayoutList, Settings2 } from '@lucide/svelte';
   import { format } from 'date-fns';
   import type { InferSelectModel } from 'drizzle-orm';
+  import { charAt, toUpperCase } from 'string-ts';
   import { toast } from 'svelte-sonner';
   import { getFlash } from 'sveltekit-flash-message';
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
@@ -108,7 +109,7 @@
               <Avatar.Root class="size-4">
                 <Avatar.Image src={bookmark.favicon} alt={bookmark.title} />
                 <Avatar.Fallback>
-                  {bookmark.title.charAt(0).toUpperCase()}
+                  {toUpperCase(charAt(bookmark.title, 0))}
                 </Avatar.Fallback>
               </Avatar.Root>
               <p class="line-clamp-1">{bookmark.title}</p>
