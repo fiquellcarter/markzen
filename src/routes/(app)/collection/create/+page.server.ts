@@ -38,7 +38,10 @@ export const actions: Actions = {
 
     redirect(
       `/collection/${slug}`,
-      { type: 'success', message: 'Collection created successfully' },
+      {
+        type: 'success',
+        message: 'Collection created successfully',
+      },
       cookies
     );
   },

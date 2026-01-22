@@ -1,10 +1,7 @@
 <script lang="ts">
-  import { toast } from 'svelte-sonner';
-  import { getFlash } from 'sveltekit-flash-message';
   import { superForm } from 'sveltekit-superforms';
   import { zod4 } from 'sveltekit-superforms/adapters';
 
-  import { page } from '$app/state';
   import { Button } from '$lib/components/ui/button';
   import * as Field from '$lib/components/ui/field';
   import { Input } from '$lib/components/ui/input';
@@ -14,20 +11,8 @@
   let { data } = $props();
 
   // svelte-ignore state_referenced_locally
-  const { form, errors, constraints, enhance, submitting } = superForm(data.form, {
+  const { form, errors, constraints, submitting, enhance } = superForm(data.form, {
     validators: zod4(updateProfileSchema),
-  });
-
-  const flash = getFlash(page);
-
-  $effect(() => {
-    if (!$flash) {
-      return;
-    }
-
-    toast[$flash.type]($flash.message);
-
-    $flash = undefined;
   });
 </script>
 

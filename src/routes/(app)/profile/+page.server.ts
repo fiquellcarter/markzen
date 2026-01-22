@@ -36,6 +36,12 @@ export const actions: Actions = {
       })
       .where(eq(user.id, locals.user.id));
 
-    setFlash({ type: 'success', message: 'Name updated successfully' }, cookies);
+    setFlash(
+      {
+        type: 'success',
+        message: 'Name updated successfully',
+      },
+      cookies
+    );
   },
 };

@@ -38,8 +38,8 @@
     form: updateForm,
     errors: updateErrors,
     constraints: updateConstraints,
-    enhance: updateEnhance,
     submitting: updateSubmitting,
+    enhance: updateEnhance,
     reset: updateReset,
   } = superForm(updateBookmarkForm, {
     id: 'update-form',
@@ -54,8 +54,8 @@
   // svelte-ignore state_referenced_locally
   const {
     form: deleteForm,
-    enhance: deleteEnhance,
     submitting: deleteSubmitting,
+    enhance: deleteEnhance,
     reset: deleteReset,
   } = superForm(deleteBookmarkForm, {
     id: 'delete-form',
@@ -115,7 +115,7 @@
       <Dialog.Title>Edit Bookmark</Dialog.Title>
       <Dialog.Description>Update the details or delete this bookmark.</Dialog.Description>
     </Dialog.Header>
-    <form id="update-bookmark-form" action="/bookmark/update" method="POST" use:updateEnhance>
+    <form id="update-form" action="/bookmark/update" method="POST" use:updateEnhance>
       <input type="hidden" name="id" bind:value={$updateForm.id} />
       <input type="hidden" name="collectionId" bind:value={$updateForm.collectionId} />
       <Field.Set>
@@ -191,7 +191,7 @@
       </div>
       <div class="flex items-center gap-2">
         <Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
-        <Button type="submit" form="update-bookmark-form" disabled={$updateSubmitting}>
+        <Button type="submit" form="update-form" disabled={$updateSubmitting}>
           {#if $updateSubmitting}
             <Spinner />
           {/if}
@@ -210,14 +210,14 @@
         This action is permanent. The bookmark will be removed and cannot be recovered.
       </AlertDialog.Description>
     </AlertDialog.Header>
-    <form id="delete-bookmark-form" action="/bookmark/delete" method="POST" use:deleteEnhance>
+    <form id="delete-form" action="/bookmark/delete" method="POST" use:deleteEnhance>
       <input type="hidden" name="id" bind:value={$deleteForm.id} />
     </form>
     <AlertDialog.Footer>
       <AlertDialog.Cancel onclick={() => (isUpdateOpen = true)}>Cancel</AlertDialog.Cancel>
       <AlertDialog.Action
         type="submit"
-        form="delete-bookmark-form"
+        form="delete-form"
         disabled={$deleteSubmitting}
         class={buttonVariants({ variant: 'destructive' })}>
         {#if $deleteSubmitting}

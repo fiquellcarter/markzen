@@ -18,10 +18,10 @@
 
   let { data, children } = $props();
 
-  let isSigningOut = $state(false);
+  let isSignOut = $state(false);
 
   async function handleSignOut() {
-    isSigningOut = true;
+    isSignOut = true;
 
     await delay();
 
@@ -40,13 +40,16 @@
         toast.error(error.message);
       }
     } finally {
-      isSigningOut = false;
+      isSignOut = false;
     }
   }
 </script>
 
 <Sidebar.Provider style="--sidebar-width: 20rem; --sidebar-width-mobile: 20rem;">
-  <AppSidebar {data} />
+  <AppSidebar
+    collections={data.collections}
+    createCollectionForm={data.createCollectionForm}
+    createBookmarkForm={data.createBookmarkForm} />
   <Sidebar.Inset>
     <div class="container">
       <div class="flex min-h-12 w-full items-center py-2">
@@ -87,9 +90,9 @@
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                   variant="destructive"
-                  disabled={isSigningOut}
+                  disabled={isSignOut}
                   onclick={handleSignOut}>
-                  {#if isSigningOut}
+                  {#if isSignOut}
                     <Spinner />
                   {:else}
                     <LogOut />

@@ -1,13 +1,8 @@
 <script lang="ts">
   import { Bookmark, ExternalLink, Inbox, LayoutGrid, LayoutList, Settings2 } from '@lucide/svelte';
   import { format } from 'date-fns';
-  import type { InferSelectModel } from 'drizzle-orm';
   import { charAt, toUpperCase } from 'string-ts';
-  import { toast } from 'svelte-sonner';
-  import { getFlash } from 'sveltekit-flash-message';
-  import type { Infer, SuperValidated } from 'sveltekit-superforms';
 
-  import { page } from '$app/state';
   import BookmarkManageDialogs from '$lib/components/bookmark-manage-dialogs.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Badge } from '$lib/components/ui/badge';
@@ -15,20 +10,9 @@
   import * as ButtonGroup from '$lib/components/ui/button-group';
   import * as Card from '$lib/components/ui/card';
   import * as Empty from '$lib/components/ui/empty';
-  import type { DeleteBookmarkSchema, UpdateBookmarkSchema } from '$lib/schemas/bookmark';
-  import type { bookmark, collection } from '$lib/server/db/schema';
   import { cn } from '$lib/utils';
 
-  let {
-    data,
-  }: {
-    data: {
-      collections: InferSelectModel<typeof collection>[];
-      bookmarks: InferSelectModel<typeof bookmark>[];
-      updateBookmarkForm: SuperValidated<Infer<UpdateBookmarkSchema>>;
-      deleteBookmarkForm: SuperValidated<Infer<DeleteBookmarkSchema>>;
-    };
-  } = $props();
+  let { data } = $props();
 
   let view = $state<'grid' | 'list'>('grid');
   let dialogs = $state<{
@@ -45,18 +29,6 @@
   );
 
   const hasBookmarks = $derived(unsortedBookmarks.length > 0);
-
-  const flash = getFlash(page);
-
-  $effect(() => {
-    if (!$flash) {
-      return;
-    }
-
-    toast[$flash.type]($flash.message);
-
-    $flash = undefined;
-  });
 </script>
 
 <section class="flex flex-col gap-4">
@@ -64,7 +36,7 @@
     <div>
       <h1>Unsorted</h1>
       <p class="text-muted-foreground">
-        You have {unsortedBookmarks.length} saved bookmarks
+        You have {unsortedBookmarks.length} saved bookmarks.
       </p>
     </div>
     <ButtonGroup.Root class="hidden sm:block">

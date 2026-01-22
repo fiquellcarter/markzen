@@ -38,6 +38,12 @@ export const actions: Actions = {
       favicon: metadata.favicon,
     });
 
-    setFlash({ type: 'success', message: 'Bookmark created successfully' }, cookies);
+    setFlash(
+      {
+        type: 'success',
+        message: 'Bookmark created successfully',
+      },
+      cookies
+    );
   },
 };

@@ -34,7 +34,15 @@ export const actions: Actions = {
       .where(and(eq(bookmark.userId, locals.user.id), eq(bookmark.id, form.data.id)));
 
     if (!existingBookmark) {
-      return setFlash({ type: 'error', message: 'Bookmark not found' }, cookies);
+      setFlash(
+        {
+          type: 'error',
+          message: 'Bookmark not found',
+        },
+        cookies
+      );
+
+      return;
     }
 
     const metadata = await extractMetadata(form.data.url);
@@ -50,6 +58,12 @@ export const actions: Actions = {
       })
       .where(eq(bookmark.id, form.data.id));
 
-    setFlash({ type: 'success', message: 'Bookmark updated successfully' }, cookies);
+    setFlash(
+      {
+        type: 'success',
+        message: 'Bookmark updated successfully',
+      },
+      cookies
+    );
   },
 };

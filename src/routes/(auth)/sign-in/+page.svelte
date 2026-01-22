@@ -6,23 +6,30 @@
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import { Spinner } from '$lib/components/ui/spinner';
+  import { delay } from '$lib/utils';
 
-  let isLoading = $state(false);
+  let isSignIn = $state(false);
 
   async function handleSignIn() {
-    isLoading = true;
+    isSignIn = true;
+
+    await delay();
 
     try {
-      await auth.signIn.social({
+      const { error } = await auth.signIn.social({
         provider: 'github',
         callbackURL: '/dashboard',
       });
+
+      if (error) {
+        toast.error('Failed to sign in');
+      }
     } catch (error) {
       if (error instanceof APIError) {
         toast.error(error.message);
       }
     } finally {
-      isLoading = false;
+      isSignIn = false;
     }
   }
 </script>
@@ -35,8 +42,8 @@
     </Card.Description>
   </Card.Header>
   <Card.Content>
-    <Button variant="outline" size="lg" disabled={isLoading} class="w-full" onclick={handleSignIn}>
-      {#if isLoading}
+    <Button variant="outline" size="lg" disabled={isSignIn} class="w-full" onclick={handleSignIn}>
+      {#if isSignIn}
         <Spinner />
       {:else}
         <svg

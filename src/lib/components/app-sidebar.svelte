@@ -21,13 +21,13 @@
   import type { collection } from '$lib/server/db/schema';
 
   let {
-    data,
+    collections,
+    createCollectionForm,
+    createBookmarkForm,
   }: {
-    data: {
-      collections: InferSelectModel<typeof collection>[];
-      createCollectionForm: SuperValidated<Infer<CreateCollectionSchema>>;
-      createBookmarkForm: SuperValidated<Infer<CreateBookmarkSchema>>;
-    };
+    collections: InferSelectModel<typeof collection>[];
+    createCollectionForm: SuperValidated<Infer<CreateCollectionSchema>>;
+    createBookmarkForm: SuperValidated<Infer<CreateBookmarkSchema>>;
   } = $props();
 
   let isCollectionOpen = $state(false);
@@ -39,9 +39,9 @@
     form: collectionForm,
     errors: collectionErrors,
     constraints: collectionConstraints,
-    enhance: collectionEnhance,
     submitting: collectionSubmitting,
-  } = superForm(data.createCollectionForm, {
+    enhance: collectionEnhance,
+  } = superForm(createCollectionForm, {
     id: 'collection-form',
     validators: zod4(createCollectionSchema),
     onResult({ result }) {
@@ -56,9 +56,9 @@
     form: bookmarkForm,
     errors: bookmarkErrors,
     constraints: bookmarkConstraints,
-    enhance: bookmarkEnhance,
     submitting: bookmarkSubmitting,
-  } = superForm(data.createBookmarkForm, {
+    enhance: bookmarkEnhance,
+  } = superForm(createBookmarkForm, {
     id: 'bookmark-form',
     validators: zod4(createBookmarkSchema),
     onResult({ result }) {
@@ -69,7 +69,7 @@
   });
 
   const collectionsById = $derived(
-    Object.fromEntries(data.collections.map((collection) => [collection.id, collection]))
+    Object.fromEntries(collections.map((collection) => [collection.id, collection]))
   );
 
   const collectionLabel = $derived(
@@ -142,7 +142,7 @@
       </Sidebar.GroupAction>
       <Sidebar.GroupContent>
         <Sidebar.Menu>
-          {#each data.collections as collection (collection.id)}
+          {#each collections as collection (collection.id)}
             <Sidebar.MenuItem>
               <Sidebar.MenuButton tooltipContent={collection.name}>
                 {#snippet child({ props })}
@@ -220,7 +220,7 @@
         </Field.Group>
       </Field.Set>
     </form>
-    <Dialog.Footer>
+    <Dialog.Footer class="pt-6">
       <Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
       <Button type="submit" form="collection-form" disabled={$collectionSubmitting}>
         {#if $collectionSubmitting}
@@ -266,7 +266,7 @@
               </Select.Trigger>
               <Select.Content>
                 <Select.Item value="">Unsorted</Select.Item>
-                {#each data.collections as collection (collection.id)}
+                {#each collections as collection (collection.id)}
                   <Select.Item value={collection.id}>{collection.name}</Select.Item>
                 {/each}
               </Select.Content>
@@ -276,7 +276,7 @@
         </Field.Group>
       </Field.Set>
     </form>
-    <Dialog.Footer>
+    <Dialog.Footer class="pt-6">
       <Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
       <Button type="submit" form="bookmark-form" disabled={$bookmarkSubmitting}>
         {#if $bookmarkSubmitting}

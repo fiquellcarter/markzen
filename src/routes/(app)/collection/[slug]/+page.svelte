@@ -8,14 +8,10 @@
     Settings2,
   } from '@lucide/svelte';
   import { format } from 'date-fns';
-  import type { InferSelectModel } from 'drizzle-orm';
   import { charAt, toUpperCase } from 'string-ts';
-  import { toast } from 'svelte-sonner';
-  import { getFlash } from 'sveltekit-flash-message';
-  import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+  import { superForm } from 'sveltekit-superforms';
   import { zod4 } from 'sveltekit-superforms/adapters';
 
-  import { page } from '$app/state';
   import BookmarkManageDialogs from '$lib/components/bookmark-manage-dialogs.svelte';
   import * as AlertDialog from '$lib/components/ui/alert-dialog';
   import * as Avatar from '$lib/components/ui/avatar';
@@ -30,29 +26,10 @@
   import { Separator } from '$lib/components/ui/separator';
   import { Spinner } from '$lib/components/ui/spinner';
   import { Textarea } from '$lib/components/ui/textarea';
-  import type { DeleteBookmarkSchema, UpdateBookmarkSchema } from '$lib/schemas/bookmark';
-  import {
-    deleteCollectionSchema,
-    updateCollectionSchema,
-    type DeleteCollectionSchema,
-    type UpdateCollectionSchema,
-  } from '$lib/schemas/collection';
-  import type { bookmark, collection } from '$lib/server/db/schema';
+  import { deleteCollectionSchema, updateCollectionSchema } from '$lib/schemas/collection';
   import { cn } from '$lib/utils';
 
-  let {
-    data,
-  }: {
-    data: {
-      collection: InferSelectModel<typeof collection>;
-      collections: InferSelectModel<typeof collection>[];
-      bookmarks: InferSelectModel<typeof bookmark>[];
-      updateCollectionForm: SuperValidated<Infer<UpdateCollectionSchema>>;
-      deleteCollectionForm: SuperValidated<Infer<DeleteCollectionSchema>>;
-      updateBookmarkForm: SuperValidated<Infer<UpdateBookmarkSchema>>;
-      deleteBookmarkForm: SuperValidated<Infer<DeleteBookmarkSchema>>;
-    };
-  } = $props();
+  let { data } = $props();
 
   let view = $state<'grid' | 'list'>('grid');
   let isUpdateOpen = $state(false);
@@ -66,8 +43,8 @@
     form: updateForm,
     errors: updateErrors,
     constraints: updateConstraints,
-    enhance: updateEnhance,
     submitting: updateSubmitting,
+    enhance: updateEnhance,
   } = superForm(data.updateCollectionForm, {
     id: 'update-form',
     validators: zod4(updateCollectionSchema),
@@ -81,8 +58,8 @@
   // svelte-ignore state_referenced_locally
   const {
     form: deleteForm,
-    enhance: deleteEnhance,
     submitting: deleteSubmitting,
+    enhance: deleteEnhance,
   } = superForm(data.deleteCollectionForm, {
     id: 'delete-form',
     validators: zod4(deleteCollectionSchema),
@@ -103,18 +80,6 @@
   );
 
   const hasBookmarks = $derived(collectionBookmarks.length > 0);
-
-  const flash = getFlash(page);
-
-  $effect(() => {
-    if (!$flash) {
-      return;
-    }
-
-    toast[$flash.type]($flash.message);
-
-    $flash = undefined;
-  });
 </script>
 
 <section class="flex flex-col gap-4">
@@ -125,7 +90,7 @@
         {#if data.collection.description}
           <span>{data.collection.description} •</span>
         {/if}
-        <span>You have {collectionBookmarks.length} saved bookmarks</span>
+        <span>You have {collectionBookmarks.length} saved bookmarks.</span>
       </p>
     </div>
     <div class="sm:flex sm:h-6 sm:items-center sm:gap-2">
@@ -146,78 +111,10 @@
         </Button>
       </ButtonGroup.Root>
       <Separator orientation="vertical" class="hidden sm:block" />
-      <Dialog.Root bind:open={isUpdateOpen}>
-        <Dialog.Trigger class={buttonVariants({ variant: 'outline', size: 'icon' })}>
-          <Settings2 />
-          <span class="sr-only">Manage Collection</span>
-        </Dialog.Trigger>
-        <Dialog.Content>
-          <Dialog.Header>
-            <Dialog.Title>Edit Collection</Dialog.Title>
-            <Dialog.Description>Update the details or delete this collection.</Dialog.Description>
-          </Dialog.Header>
-          <form
-            id="update-collection-form"
-            action="/collection/update"
-            method="POST"
-            use:updateEnhance>
-            <input type="hidden" name="id" bind:value={$updateForm.id} />
-            <Field.Set>
-              <Field.Group>
-                <Field.Field>
-                  <Field.Label for="name">Name</Field.Label>
-                  <Input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="UI Inspiration"
-                    aria-invalid={$updateErrors.name ? 'true' : undefined}
-                    bind:value={$updateForm.name}
-                    {...$updateConstraints.name} />
-                  {#if $updateErrors.name}
-                    <Field.FieldError>{$updateErrors.name}</Field.FieldError>
-                  {:else}
-                    <Field.Description>A recognizable name for this collection.</Field.Description>
-                  {/if}
-                </Field.Field>
-                <Field.Field>
-                  <Field.Label for="description">Description</Field.Label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    placeholder="Optional notes about this collection"
-                    aria-invalid={$updateErrors.description ? 'true' : undefined}
-                    bind:value={$updateForm.description}
-                    {...$updateConstraints.description} />
-                  {#if $updateErrors.description}
-                    <Field.FieldError>{$updateErrors.description}</Field.FieldError>
-                  {:else}
-                    <Field.Description>Additional context for this collection.</Field.Description>
-                  {/if}
-                </Field.Field>
-              </Field.Group>
-            </Field.Set>
-          </form>
-          <Dialog.Footer class="flex-col sm:justify-between">
-            <div>
-              <Button
-                variant="destructive"
-                onclick={() => ((isDeleteOpen = true), (isUpdateOpen = false))}>
-                Delete Collection
-              </Button>
-            </div>
-            <div class="flex items-center gap-2">
-              <Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
-              <Button type="submit" form="update-collection-form" disabled={$updateSubmitting}>
-                {#if $updateSubmitting}
-                  <Spinner />
-                {/if}
-                Save Changes
-              </Button>
-            </div>
-          </Dialog.Footer>
-        </Dialog.Content>
-      </Dialog.Root>
+      <Button variant="outline" size="icon" onclick={() => (isUpdateOpen = true)}>
+        <Settings2 />
+        <span class="sr-only">Manage Collection</span>
+      </Button>
     </div>
   </div>
   {#if !hasBookmarks}
@@ -290,6 +187,71 @@
   {/if}
 </section>
 
+<Dialog.Root bind:open={isUpdateOpen}>
+  <Dialog.Content>
+    <Dialog.Header>
+      <Dialog.Title>Edit Collection</Dialog.Title>
+      <Dialog.Description>Update the details or delete this collection.</Dialog.Description>
+    </Dialog.Header>
+    <form id="update-form" action="?/update" method="POST" use:updateEnhance>
+      <input type="hidden" name="id" bind:value={$updateForm.id} />
+      <Field.Set>
+        <Field.Group>
+          <Field.Field>
+            <Field.Label for="name">Name</Field.Label>
+            <Input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="UI Inspiration"
+              aria-invalid={$updateErrors.name ? 'true' : undefined}
+              bind:value={$updateForm.name}
+              {...$updateConstraints.name} />
+            {#if $updateErrors.name}
+              <Field.FieldError>{$updateErrors.name}</Field.FieldError>
+            {:else}
+              <Field.Description>A recognizable name for this collection.</Field.Description>
+            {/if}
+          </Field.Field>
+          <Field.Field>
+            <Field.Label for="description">Description</Field.Label>
+            <Textarea
+              id="description"
+              name="description"
+              placeholder="Optional notes about this collection"
+              aria-invalid={$updateErrors.description ? 'true' : undefined}
+              bind:value={$updateForm.description}
+              {...$updateConstraints.description} />
+            {#if $updateErrors.description}
+              <Field.FieldError>{$updateErrors.description}</Field.FieldError>
+            {:else}
+              <Field.Description>Additional context for this collection.</Field.Description>
+            {/if}
+          </Field.Field>
+        </Field.Group>
+      </Field.Set>
+    </form>
+    <Dialog.Footer class="flex-col pt-6 sm:justify-between">
+      <div>
+        <Button
+          variant="destructive"
+          onclick={() => ((isDeleteOpen = true), (isUpdateOpen = false))}>
+          Delete Collection
+        </Button>
+      </div>
+      <div class="flex items-center gap-2">
+        <Dialog.Close class={buttonVariants({ variant: 'outline' })}>Cancel</Dialog.Close>
+        <Button type="submit" form="update-form" disabled={$updateSubmitting}>
+          {#if $updateSubmitting}
+            <Spinner />
+          {/if}
+          Save Changes
+        </Button>
+      </div>
+    </Dialog.Footer>
+  </Dialog.Content>
+</Dialog.Root>
+
 <AlertDialog.Root bind:open={isDeleteOpen}>
   <AlertDialog.Content escapeKeydownBehavior="ignore">
     <AlertDialog.Header>
@@ -299,14 +261,14 @@
         recovered.
       </AlertDialog.Description>
     </AlertDialog.Header>
-    <form id="delete-collection-form" action="/collection/delete" method="POST" use:deleteEnhance>
+    <form id="delete-form" action="?/delete" method="POST" use:deleteEnhance>
       <input type="hidden" name="id" bind:value={$deleteForm.id} />
     </form>
     <AlertDialog.Footer>
       <AlertDialog.Cancel onclick={() => (isUpdateOpen = true)}>Cancel</AlertDialog.Cancel>
       <AlertDialog.Action
         type="submit"
-        form="delete-collection-form"
+        form="delete-form"
         disabled={$deleteSubmitting}
         class={buttonVariants({ variant: 'destructive' })}>
         {#if $deleteSubmitting}
