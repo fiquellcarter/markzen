@@ -73,7 +73,7 @@
                 </Button>
               {/snippet}
             </DropdownMenu.Trigger>
-            <DropdownMenu.Content align="end" class="w-48">
+            <DropdownMenu.Content align="end" class="w-64">
               <DropdownMenu.Group>
                 <DropdownMenu.Label>
                   <p class="mb-0.5 text-[10px] font-normal text-muted-foreground">Signed in as</p>
