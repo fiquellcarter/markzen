@@ -1,3 +1,4 @@
+import { definePageMetaTags } from 'svelte-meta-tags';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
@@ -9,8 +10,13 @@ export async function load() {
     superValidate(zod4(deleteBookmarkSchema)),
   ]);
 
+  const pageTags = definePageMetaTags({
+    title: 'All Bookmarks',
+  });
+
   return {
     updateBookmarkForm,
     deleteBookmarkForm,
+    ...pageTags,
   };
 }

@@ -1,6 +1,7 @@
 import { error, fail } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import { kebabCase } from 'string-ts';
+import { definePageMetaTags } from 'svelte-meta-tags';
 import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
@@ -41,12 +42,17 @@ export async function load({ params, parent }) {
       superValidate(zod4(deleteBookmarkSchema)),
     ]);
 
+  const pageTags = definePageMetaTags({
+    title: existingCollection.name,
+  });
+
   return {
     collection: existingCollection,
     updateCollectionForm,
     deleteCollectionForm,
     updateBookmarkForm,
     deleteBookmarkForm,
+    ...pageTags,
   };
 }
 

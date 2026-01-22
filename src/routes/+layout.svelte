@@ -1,18 +1,18 @@
 <script lang="ts">
   import { ModeWatcher } from 'mode-watcher';
+  import { deepMerge, MetaTags } from 'svelte-meta-tags';
 
-  import favicon from '$lib/assets/favicon.svg';
+  import { page } from '$app/state';
   import { Toaster } from '$lib/components/ui/sonner';
 
   import './layout.css';
 
-  let { children } = $props();
+  let { data, children } = $props();
+
+  let metaTags = $derived(deepMerge(data.baseMetaTags, page.data.pageMetaTags));
 </script>
 
-<svelte:head>
-  <link rel="icon" href={favicon} />
-</svelte:head>
-
+<MetaTags {...metaTags} />
 <ModeWatcher />
 <Toaster position="top-center" />
 

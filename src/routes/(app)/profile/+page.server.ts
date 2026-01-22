@@ -1,5 +1,6 @@
 import { fail } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
+import { definePageMetaTags } from 'svelte-meta-tags';
 import { setFlash } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
@@ -14,8 +15,13 @@ import type { Actions } from './$types';
 export async function load({ parent }) {
   const parentData = await parent();
 
+  const pageTags = definePageMetaTags({
+    title: 'Profile',
+  });
+
   return {
     form: await superValidate(parentData.session.user, zod4(updateProfileSchema)),
+    ...pageTags,
   };
 }
 

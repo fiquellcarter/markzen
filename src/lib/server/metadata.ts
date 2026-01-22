@@ -1,6 +1,5 @@
 import * as cheerio from 'cheerio';
 
-// TODO: update User-Agent with production URL and release version
 const USER_AGENT = 'Mozilla/5.0 (compatible; Markzen/1.0; +http://localhost:5173)';
 const FETCH_TIMEOUT = 10_000;
 
