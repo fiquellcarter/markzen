@@ -1,13 +1,48 @@
 <script lang="ts">
-  import { Moon, Sun } from '@lucide/svelte';
+  import { LogOut, Moon, Sun, UserCog } from '@lucide/svelte';
+  import { APIError } from 'better-auth/api';
   import { toggleMode } from 'mode-watcher';
+  import { charAt, toUpperCase } from 'string-ts';
+  import { toast } from 'svelte-sonner';
 
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
+  import { auth } from '$lib/auth/client';
   import AppSidebar from '$lib/components/app-sidebar.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import { Button } from '$lib/components/ui/button';
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import * as Sidebar from '$lib/components/ui/sidebar';
+  import { Spinner } from '$lib/components/ui/spinner';
+  import { delay } from '$lib/utils';
 
   let { data, children } = $props();
+
+  let isSigningOut = $state(false);
+
+  async function handleSignOut() {
+    isSigningOut = true;
+
+    await delay();
+
+    try {
+      const { error } = await auth.signOut();
+
+      if (error) {
+        toast.error('Failed to sign out');
+
+        return;
+      }
+
+      await goto(resolve('/'));
+    } catch (error) {
+      if (error instanceof APIError) {
+        toast.error(error.message);
+      }
+    } finally {
+      isSigningOut = false;
+    }
+  }
 </script>
 
 <Sidebar.Provider style="--sidebar-width: 20rem; --sidebar-width-mobile: 20rem;">
@@ -24,13 +59,46 @@
             <Moon class="absolute scale-0 rotate-90 transition-all! dark:scale-100 dark:rotate-0" />
             <span class="sr-only">Toggle Theme</span>
           </Button>
-          <Button href="/profile" variant="outline">
-            {data.session.user.name}
-            <Avatar.Root class="size-5">
-              <Avatar.Image src={data.session.user.image} alt={data.session.user.name} />
-              <Avatar.Fallback>{data.session.user.name.charAt(0)}</Avatar.Fallback>
-            </Avatar.Root>
-          </Button>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              {#snippet child({ props })}
+                <Button variant="outline" {...props}>
+                  {data.session.user.name}
+                  <Avatar.Root class="size-5">
+                    <Avatar.Image src={data.session.user.image} alt={data.session.user.name} />
+                    <Avatar.Fallback>
+                      {toUpperCase(charAt(data.session.user.name, 0))}
+                    </Avatar.Fallback>
+                  </Avatar.Root>
+                </Button>
+              {/snippet}
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content align="end" class="w-48">
+              <DropdownMenu.Group>
+                <DropdownMenu.Label>
+                  <p class="mb-0.5 text-[10px] font-normal text-muted-foreground">Signed in as</p>
+                  <p>{data.session.user.name}</p>
+                  <p class="text-xs font-medium text-muted-foreground">{data.session.user.email}</p>
+                </DropdownMenu.Label>
+                <DropdownMenu.Separator />
+                <DropdownMenu.Item onclick={async () => await goto(resolve('/profile'))}>
+                  <UserCog />
+                  Profile
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                  variant="destructive"
+                  disabled={isSigningOut}
+                  onclick={handleSignOut}>
+                  {#if isSigningOut}
+                    <Spinner />
+                  {:else}
+                    <LogOut />
+                  {/if}
+                  Sign out
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </div>
       </div>
       <div class="typography py-4">
