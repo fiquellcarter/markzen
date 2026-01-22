@@ -42,6 +42,7 @@
     enhance: collectionEnhance,
     submitting: collectionSubmitting,
   } = superForm(data.createCollectionForm, {
+    id: 'collection-form',
     validators: zod4(createCollectionSchema),
     onResult({ result }) {
       if (result.type === 'redirect') {
@@ -58,6 +59,7 @@
     enhance: bookmarkEnhance,
     submitting: bookmarkSubmitting,
   } = superForm(data.createBookmarkForm, {
+    id: 'bookmark-form',
     validators: zod4(createBookmarkSchema),
     onResult({ result }) {
       if (result.type === 'success') {

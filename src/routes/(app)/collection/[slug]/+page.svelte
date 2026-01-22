@@ -69,6 +69,7 @@
     enhance: updateEnhance,
     submitting: updateSubmitting,
   } = superForm(data.updateCollectionForm, {
+    id: 'update-form',
     validators: zod4(updateCollectionSchema),
     onResult({ result }) {
       if (result.type === 'redirect') {
@@ -83,6 +84,7 @@
     enhance: deleteEnhance,
     submitting: deleteSubmitting,
   } = superForm(data.deleteCollectionForm, {
+    id: 'delete-form',
     validators: zod4(deleteCollectionSchema),
     onResult({ result }) {
       if (result.type === 'redirect') {

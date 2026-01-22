@@ -42,6 +42,7 @@
     submitting: updateSubmitting,
     reset: updateReset,
   } = superForm(updateBookmarkForm, {
+    id: 'update-form',
     validators: zod4(updateBookmarkSchema),
     onResult({ result }) {
       if (result.type === 'success') {
@@ -57,6 +58,7 @@
     submitting: deleteSubmitting,
     reset: deleteReset,
   } = superForm(deleteBookmarkForm, {
+    id: 'delete-form',
     validators: zod4(deleteBookmarkSchema),
     onResult({ result }) {
       if (result.type === 'success') {
