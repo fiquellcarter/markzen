@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowRight, Chromium, Globe, MessageCircle, Shield } from '@lucide/svelte';
+  import { ArrowRight, Chromium, CreditCard, Globe, MessageCircle, Shield } from '@lucide/svelte';
   import { charAt, toUpperCase } from 'string-ts';
 
   import * as Avatar from '$lib/components/ui/avatar';
@@ -34,23 +34,24 @@
       class="absolute top-0 left-0 h-320 w-60 -translate-y-87.5 -rotate-45 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,hsla(0,0%,85%,.04)_0,hsla(0,0%,45%,.02)_80%,transparent_100%)]">
     </div>
   </div>
-  <div class="container max-w-2xl py-32">
-    <div class="relative z-20 flex flex-col items-center gap-8 text-center">
-      <Badge variant="outline" class="animate-pulse">
-        <MessageCircle class="text-primary" />
-        Markzen 2.0 is Coming Soon
-      </Badge>
-      <h1>Bookmark manager, revolutionized.</h1>
-      <p>
-        Easy-to-use, Markzen lets you save, customize, and manage all your bookmarks and texts
-        online like a breeze.
-      </p>
-      <div>
-        <Button href="/sign-in" size="lg">
-          Get Started for Free
-          <ArrowRight />
-        </Button>
-        <p class="text-xs text-muted-foreground">No credit card required</p>
+  <div class="relative z-20 container max-w-2xl py-32 text-center">
+    <Badge variant="outline" class="mb-2">
+      <MessageCircle class="text-primary" />
+      Markzen 2.0 is Coming Soon
+    </Badge>
+    <h1 class="mb-8">Bookmark manager, revolutionized.</h1>
+    <p class="mb-12">
+      Easy-to-use, Markzen lets you save, customize, and manage all your bookmarks and texts online
+      like a breeze.
+    </p>
+    <div class="flex flex-col items-center gap-4">
+      <Button href="/sign-in" size="lg">
+        Get Started for Free
+        <ArrowRight />
+      </Button>
+      <div class="not-typography flex items-center gap-2 text-sm text-muted-foreground">
+        <CreditCard />
+        <p>No credit card required</p>
       </div>
     </div>
   </div>
