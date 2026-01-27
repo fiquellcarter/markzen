@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowRight, MessageCircle } from '@lucide/svelte';
+  import { ArrowRight, Chrome, Chromium, Globe, MessageCircle, Shield } from '@lucide/svelte';
 
   import { Badge } from '$lib/components/ui/badge';
   import { Button } from '$lib/components/ui/button';
@@ -63,5 +63,37 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="container py-32">
+  <div
+    class="relative mx-auto max-w-4xl overflow-hidden rounded-4xl border bg-card/20 px-2 py-12 text-center md:px-12">
+    <div
+      class="absolute top-0 right-0 h-3/5 w-2/5 translate-x-1/3 -translate-y-1/3 rounded-full bg-primary/20 blur-[6.25rem]">
+    </div>
+    <div class="mx-auto mb-12 flex max-w-xl flex-col gap-6">
+      <div class="flex items-center justify-center gap-4">
+        <div class="flex size-12 items-center justify-center rounded-full border">
+          <Chromium class="text-muted-foreground" />
+        </div>
+        <div class="flex size-12 items-center justify-center rounded-full border">
+          <Shield class="text-muted-foreground" />
+        </div>
+        <div class="flex size-12 items-center justify-center rounded-full border">
+          <Globe class="text-muted-foreground" />
+        </div>
+      </div>
+      <h2>
+        Surf the Clouds
+        <br />
+        Markzen on Every Browser
+      </h2>
+      <p class="text-lg text-muted-foreground">
+        Access Markzen through Chrome, Firefox, Safari, and Edge extensions, enabling you to
+        effortlessly save and organize all your crucial web pages and information.
+      </p>
+    </div>
+    <Button href="/sign-in" size="lg">Coming Soon</Button>
   </div>
 </section>
