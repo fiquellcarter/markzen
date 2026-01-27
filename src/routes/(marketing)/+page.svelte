@@ -1,5 +1,15 @@
 <script lang="ts">
-  import { ArrowRight, Chromium, CreditCard, Globe, MessageCircle, Shield } from '@lucide/svelte';
+  import {
+    ArrowRight,
+    Bookmark,
+    Chromium,
+    CreditCard,
+    Globe,
+    MessageCircle,
+    Palette,
+    Shield,
+    Smartphone,
+  } from '@lucide/svelte';
   import { charAt, toUpperCase } from 'string-ts';
 
   import * as Avatar from '$lib/components/ui/avatar';
@@ -44,15 +54,12 @@
       Easy-to-use, Markzen lets you save, customize, and manage all your bookmarks and texts online
       like a breeze.
     </p>
-    <div class="flex flex-col items-center gap-4">
+    <div>
       <Button href="/sign-in" size="lg">
         Get Started for Free
         <ArrowRight />
       </Button>
-      <div class="not-typography flex items-center gap-2 text-sm text-muted-foreground">
-        <CreditCard />
-        <p>No credit card required</p>
-      </div>
+      <p class="text-sm text-muted-foreground">No credit card required</p>
     </div>
   </div>
   <div class="container max-w-6xl">
@@ -78,6 +85,91 @@
             class="relative z-10 hidden rounded-lg border dark:block"
             src="https://s3-alpha.figma.com/hub/file/3988952835/9a3f2da3-7323-43bb-a1a3-6a154ff02a78-cover.png"
             alt="Dashboard screenshot" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container max-w-4xl py-32">
+  <div class="mb-12 text-center">
+    <div class="mb-6 flex justify-center">
+      <div class="flex size-12 items-center justify-center rounded-full border">
+        <Bookmark class="text-primary" />
+      </div>
+    </div>
+    <h2>
+      The all-in-one
+      <br />
+      bookmark manager
+    </h2>
+    <p class="text-muted-foreground">Save and Organize Your Web Finds Seamlessly.</p>
+  </div>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-12">
+    <div class="group flex flex-col justify-between rounded-2xl border p-8 sm:col-span-7">
+      <div>
+        <h3>Organize Like a Pro</h3>
+        <p class="text-muted-foreground">Effortless organization, unmatched simplicity.</p>
+      </div>
+      <div
+        class="relative mt-4 h-64 w-full translate-y-4 rounded-2xl bg-card/40 p-4 transition-transform duration-300 group-hover:translate-y-0">
+        <div class="flex h-full gap-4">
+          <div class="h-full w-1/3 rounded-2xl bg-card/80"></div>
+          <div class="flex flex-1 flex-col gap-4">
+            <div class="h-1/2 rounded-2xl bg-primary/10"></div>
+            <div class="flex-1 rounded-2xl bg-card/80"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="group flex flex-col justify-between rounded-2xl border p-8 md:col-span-5">
+      <div>
+        <h3>Customizable Views</h3>
+        <p class="text-muted-foreground">View your bookmarks your way.</p>
+      </div>
+      <div class="flex justify-center gap-2">
+        <div
+          class="h-48 w-48 -rotate-12 transform rounded-2xl bg-card/80 transition-transform duration-300 group-hover:-translate-y-2">
+        </div>
+        <div
+          class="h-48 w-48 -rotate-12 transform rounded-2xl bg-primary/10 transition-transform duration-300 group-hover:-translate-y-2">
+        </div>
+      </div>
+    </div>
+    <div class="rounded-2xl border p-8 md:col-span-4">
+      <div
+        class="flex size-10 items-center justify-center rounded-full border border-primary/20 bg-primary/20 text-primary">
+        <Palette />
+      </div>
+      <h3>Personalize to Your Liking</h3>
+      <p class="text-sm text-muted-foreground">
+        Tailored experience: custom boards, icons, a seamless browsing experience.
+      </p>
+    </div>
+    <div
+      class="flex items-start justify-between overflow-hidden rounded-2xl border p-8 md:col-span-8">
+      <div class="max-w-[50%]">
+        <div
+          class="flex size-10 items-center justify-center rounded-full border border-accent/20 bg-accent/20 text-accent-foreground">
+          <Smartphone />
+        </div>
+        <h3>Mobile Experience</h3>
+        <p class="mb-8 text-muted-foreground">
+          Access Markzen seamlessly on the go. Enjoy a great experience on mobile devices.
+        </p>
+        <Button href="/sign-in" variant="ghost">
+          Try Markzen Now
+          <ArrowRight />
+        </Button>
+      </div>
+      <div class="h-64 w-56 translate-y-12 rotate-6 rounded-2xl bg-card/40">
+        <div class="flex flex-col gap-4 p-4">
+          <div class="h-2 w-full rounded-lg bg-card/80"></div>
+          <div class="h-32 w-full rounded-lg bg-primary/10"></div>
+          <div class="flex flex-col gap-2">
+            <div class="h-2 w-3/4 rounded-lg bg-card/80"></div>
+            <div class="h-2 w-1/2 rounded-lg bg-card/60"></div>
+          </div>
         </div>
       </div>
     </div>
