@@ -4,7 +4,7 @@
   import { Button } from '$lib/components/ui/button';
 </script>
 
-<section class="container max-w-4xl py-32">
+<section id="features" class="container max-w-4xl py-32">
   <div class="mb-16 text-center">
     <div class="mb-6 flex justify-center">
       <div
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col justify-between rounded-2xl border p-8 md:col-span-5">
+    <div class="flex flex-col justify-between rounded-2xl border p-8 sm:col-span-5">
       <div>
         <h3>Customizable Views</h3>
         <p class="text-muted-foreground">View your bookmarks your way.</p>
@@ -45,18 +45,18 @@
         <div class="h-52 w-full -rotate-12 rounded-2xl bg-primary/10"></div>
       </div>
     </div>
-    <div class="rounded-2xl border p-8 md:col-span-4">
+    <div class="rounded-2xl border p-8 sm:col-span-4">
       <div
-        class="flex size-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-primary">
+        class="flex size-10 items-center justify-center rounded-full border text-muted-foreground">
         <Palette />
       </div>
       <h3>Personalize to Your Liking</h3>
       <p class="text-muted-foreground">Custom boards, a seamless browsing experience.</p>
     </div>
-    <div class="flex justify-between overflow-hidden rounded-2xl border p-8 md:col-span-8">
+    <div class="flex justify-between overflow-hidden rounded-2xl border p-8 sm:col-span-8">
       <div class="max-w-[50%]">
         <div
-          class="flex size-10 items-center justify-center rounded-full border border-accent/20 bg-accent/10 text-accent-foreground">
+          class="flex size-10 items-center justify-center rounded-full border text-muted-foreground">
           <Smartphone />
         </div>
         <h3>Mobile Experience</h3>
