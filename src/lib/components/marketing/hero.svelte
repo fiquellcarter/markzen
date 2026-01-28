@@ -53,11 +53,11 @@
           <div class="absolute inset-0 z-20 bg-linear-to-l from-background to-transparent"></div>
           <div class="absolute inset-0 z-20 bg-linear-to-t from-background to-transparent"></div>
           <img
-            class="relative z-10 rounded-lg border dark:hidden"
+            class="relative z-10 dark:hidden"
             src={LightDashboardScreenshot}
             alt="Light dashboard screenshot" />
           <img
-            class="relative z-10 hidden rounded-lg border dark:inline"
+            class="relative z-10 hidden dark:inline"
             src={DarkDashboardScreenshot}
             alt="Dark dashboard screenshot" />
         </div>
