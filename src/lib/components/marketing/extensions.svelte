@@ -12,16 +12,13 @@
     </div>
     <div class="mx-auto mb-16 flex max-w-xl flex-col gap-4">
       <div class="flex items-center justify-center gap-4">
-        <div
-          class="flex size-12 items-center justify-center rounded-full border text-muted-foreground">
+        <div class="flex size-12 items-center justify-center rounded-full border text-primary">
           <Chromium />
         </div>
-        <div
-          class="flex size-12 items-center justify-center rounded-full border text-muted-foreground">
+        <div class="flex size-12 items-center justify-center rounded-full border text-primary">
           <Shield />
         </div>
-        <div
-          class="flex size-12 items-center justify-center rounded-full border text-muted-foreground">
+        <div class="flex size-12 items-center justify-center rounded-full border text-primary">
           <Globe />
         </div>
       </div>
