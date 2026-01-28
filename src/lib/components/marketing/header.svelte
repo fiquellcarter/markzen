@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { LoaderPinwheel } from '@lucide/svelte';
-
   import { resolve } from '$app/paths';
+  import Logo from '$lib/assets/logo.png';
   import { Button } from '$lib/components/ui/button';
 </script>
 
@@ -9,9 +8,8 @@
   <div class="absolute top-4 left-1/2 container max-w-4xl -translate-x-1/2">
     <nav class="flex min-h-14 w-full items-center rounded-2xl border px-4 py-2">
       <div class="inline-flex w-1/2 items-center justify-start">
-        <a href={resolve('/')} class="flex items-center gap-2">
-          <LoaderPinwheel />
-          <span class="font-semibold">Markzen</span>
+        <a href={resolve('/')} class="mb-1">
+          <img src={Logo} alt="Markzen Logo" class="h-auto w-20" />
         </a>
       </div>
       <div class="inline-flex w-1/2 items-center justify-end gap-2">

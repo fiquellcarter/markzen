@@ -1,18 +1,16 @@
 <script lang="ts">
-  import { LoaderPinwheel } from '@lucide/svelte';
-
   import { resolve } from '$app/paths';
+  import Logo from '$lib/assets/logo.png';
   import { Button } from '$lib/components/ui/button';
 </script>
 
 <footer class="container max-w-4xl pt-16">
   <div class="mb-16 flex flex-col gap-12 sm:flex-row sm:justify-between sm:gap-24">
     <div class="max-w-xs">
-      <a href={resolve('/')} class="mb-2 flex items-center gap-2">
-        <LoaderPinwheel />
-        <span class="font-semibold">Markzen</span>
+      <a href={resolve('/')}>
+        <img src={Logo} alt="Markzen Logo" class="h-auto w-24" />
       </a>
-      <p class="mb-4 text-sm text-muted-foreground">
+      <p class="my-4 text-sm text-muted-foreground">
         Save and organize the web. Boost your productivity and centralize your information
         management today.
       </p>

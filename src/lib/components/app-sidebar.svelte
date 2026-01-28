@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Folders, GalleryVerticalEnd, Inbox, LoaderPinwheel, Plus } from '@lucide/svelte';
+  import { Folders, GalleryVerticalEnd, Inbox, Plus } from '@lucide/svelte';
   import type { InferSelectModel } from 'drizzle-orm';
   import { toast } from 'svelte-sonner';
   import { getFlash } from 'sveltekit-flash-message';
@@ -8,6 +8,7 @@
 
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
+  import Logo from '$lib/assets/logo.png';
   import { Button, buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Field from '$lib/components/ui/field';
@@ -101,14 +102,13 @@
 </script>
 
 <Sidebar.Root variant="floating" collapsible="icon">
-  <Sidebar.Header>
+  <Sidebar.Header class="group-data-[collapsible=icon]:hidden">
     <Sidebar.Menu>
       <Sidebar.MenuItem>
-        <Sidebar.MenuButton tooltipContent="Markzen">
+        <Sidebar.MenuButton size="lg" tooltipContent="Markzen">
           {#snippet child({ props })}
             <a href={resolve('/dashboard')} {...props}>
-              <LoaderPinwheel />
-              <span class="font-semibold">Markzen</span>
+              <img src={Logo} alt="Markzen Logo" class="mb-1 ml-1 h-auto w-20" />
             </a>
           {/snippet}
         </Sidebar.MenuButton>
