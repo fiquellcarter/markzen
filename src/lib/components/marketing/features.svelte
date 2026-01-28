@@ -61,7 +61,8 @@
       </div>
     </div>
     <div class="rounded-lg border p-8 sm:col-span-4">
-      <div class="flex size-10 items-center justify-center rounded-full border text-primary">
+      <div
+        class="flex size-10 items-center justify-center rounded-full border border-border/50 text-primary">
         <Palette />
       </div>
       <h3>Personalize to Your Liking</h3>
@@ -69,7 +70,8 @@
     </div>
     <div class="flex justify-between gap-4 overflow-hidden rounded-lg border p-8 sm:col-span-8">
       <div class="max-w-[50%]">
-        <div class="flex size-10 items-center justify-center rounded-full border text-primary">
+        <div
+          class="flex size-10 items-center justify-center rounded-full border border-border/50 text-primary">
           <Smartphone />
         </div>
         <h3>Mobile Experience</h3>

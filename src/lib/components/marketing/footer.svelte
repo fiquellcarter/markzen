@@ -56,7 +56,7 @@
     </div>
   </div>
   <div
-    class="flex flex-col items-center border-t py-4 text-sm text-muted-foreground sm:flex-row sm:justify-between">
+    class="flex flex-col items-center border-t border-border/50 py-4 text-sm text-muted-foreground sm:flex-row sm:justify-between">
     <p>&copy; {new Date().getFullYear()} Markzen. All rights reserved.</p>
     <div class="mt-2 flex items-center gap-4 sm:mt-0">
       <a href="##">Terms</a>
