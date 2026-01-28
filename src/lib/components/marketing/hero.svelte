@@ -1,6 +1,8 @@
 <script lang="ts">
   import { ArrowRight, MessageCircle } from '@lucide/svelte';
 
+  import DarkDashboardScreenshot from '$lib/assets/dark-dashboard-screenshot.png';
+  import LightDashboardScreenshot from '$lib/assets/light-dashboard-screenshot.png';
   import { Badge } from '$lib/components/ui/badge';
   import { Button } from '$lib/components/ui/button';
 </script>
@@ -46,17 +48,17 @@
             class="absolute -inset-16 z-10 bg-linear-to-b from-background via-transparent to-background">
           </div>
           <div
-            class="absolute -inset-16 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-size-[20px_20px] [--color-border:color-mix(in_oklab,var(--color-foreground)_40%,transparent)]">
+            class="absolute -inset-16 bg-[linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] bg-size-[20px_20px] [--color-border:color-mix(in_oklab,var(--color-foreground)_30%,transparent)]">
           </div>
           <div class="absolute inset-0 z-20 bg-linear-to-l from-background to-transparent"></div>
           <div class="absolute inset-0 z-20 bg-linear-to-t from-background to-transparent"></div>
           <img
             class="relative z-10 rounded-lg border dark:hidden"
-            src="https://i.ytimg.com/vi/C2eluNJDNtE/hq720.jpg"
+            src={LightDashboardScreenshot}
             alt="Light dashboard screenshot" />
           <img
-            class="relative z-10 hidden rounded-lg border dark:block"
-            src="https://s3-alpha.figma.com/hub/file/3988952835/9a3f2da3-7323-43bb-a1a3-6a154ff02a78-cover.png"
+            class="relative z-10 hidden rounded-lg border dark:inline"
+            src={DarkDashboardScreenshot}
             alt="Dark dashboard screenshot" />
         </div>
       </div>

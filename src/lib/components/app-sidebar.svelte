@@ -8,7 +8,8 @@
 
   import { resolve } from '$app/paths';
   import { page } from '$app/state';
-  import Logo from '$lib/assets/logo.png';
+  import DarkLogo from '$lib/assets/dark-logo.png';
+  import LightLogo from '$lib/assets/light-logo.png';
   import { Button, buttonVariants } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import * as Field from '$lib/components/ui/field';
@@ -108,7 +109,11 @@
         <Sidebar.MenuButton size="lg" tooltipContent="Markzen">
           {#snippet child({ props })}
             <a href={resolve('/dashboard')} {...props}>
-              <img src={Logo} alt="Markzen Logo" class="mb-1 ml-1 h-auto w-20" />
+              <img
+                src={LightLogo}
+                alt="Markzen Logo"
+                class="mb-1 ml-1 hidden h-auto w-20 dark:inline" />
+              <img src={DarkLogo} alt="Markzen Logo" class="mb-1 ml-1 h-auto w-20 dark:hidden" />
             </a>
           {/snippet}
         </Sidebar.MenuButton>

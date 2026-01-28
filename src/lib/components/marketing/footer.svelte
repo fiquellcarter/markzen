@@ -1,6 +1,7 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import Logo from '$lib/assets/logo.png';
+  import DarkLogo from '$lib/assets/dark-logo.png';
+  import LightLogo from '$lib/assets/light-logo.png';
   import { Button } from '$lib/components/ui/button';
 </script>
 
@@ -8,7 +9,8 @@
   <div class="mb-16 flex flex-col gap-12 sm:flex-row sm:justify-between sm:gap-24">
     <div class="max-w-xs">
       <a href={resolve('/')}>
-        <img src={Logo} alt="Markzen Logo" class="h-auto w-24" />
+        <img src={LightLogo} alt="Markzen Logo" class="hidden h-auto w-24 dark:inline" />
+        <img src={DarkLogo} alt="Markzen Logo" class="h-auto w-24 dark:hidden" />
       </a>
       <p class="my-4 text-sm text-muted-foreground">
         Save and organize the web. Boost your productivity and centralize your information
