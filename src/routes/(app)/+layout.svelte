@@ -50,63 +50,58 @@
     collections={data.collections}
     createCollectionForm={data.createCollectionForm}
     createBookmarkForm={data.createBookmarkForm} />
-  <Sidebar.Inset>
-    <div class="container">
-      <div class="flex min-h-12 w-full items-center py-2">
-        <div class="inline-flex w-1/2 items-center justify-start">
-          <Sidebar.Trigger />
-        </div>
-        <div class="inline-flex w-1/2 items-center justify-end gap-2">
-          <Button variant="outline" size="icon" onclick={toggleMode}>
-            <Sun class="scale-100 rotate-0 transition-all! dark:scale-0 dark:-rotate-90" />
-            <Moon class="absolute scale-0 rotate-90 transition-all! dark:scale-100 dark:rotate-0" />
-            <span class="sr-only">Toggle Theme</span>
-          </Button>
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              {#snippet child({ props })}
-                <Button variant="outline" {...props}>
-                  {data.session.user.name}
-                  <Avatar.Root class="size-5">
-                    <Avatar.Image src={data.session.user.image} alt={data.session.user.name} />
-                    <Avatar.Fallback>
-                      {toUpperCase(charAt(data.session.user.name, 0))}
-                    </Avatar.Fallback>
-                  </Avatar.Root>
-                </Button>
-              {/snippet}
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content align="end" class="w-64">
-              <DropdownMenu.Group>
-                <DropdownMenu.Label>
-                  <p class="mb-0.5 text-[10px] font-normal text-muted-foreground">Signed in as</p>
-                  <p>{data.session.user.name}</p>
-                  <p class="text-xs font-medium text-muted-foreground">{data.session.user.email}</p>
-                </DropdownMenu.Label>
-                <DropdownMenu.Separator />
-                <DropdownMenu.Item onclick={async () => await goto(resolve('/profile'))}>
-                  <UserCog />
-                  Profile
-                </DropdownMenu.Item>
-                <DropdownMenu.Item
-                  variant="destructive"
-                  disabled={isSignOut}
-                  onclick={handleSignOut}>
-                  {#if isSignOut}
-                    <Spinner />
-                  {:else}
-                    <LogOut />
-                  {/if}
-                  Sign out
-                </DropdownMenu.Item>
-              </DropdownMenu.Group>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
-        </div>
+  <div class="container">
+    <div class="flex min-h-12 w-full items-center py-2">
+      <div class="inline-flex w-1/2 items-center justify-start">
+        <Sidebar.Trigger />
       </div>
-      <div class="typography py-4">
-        {@render children()}
+      <div class="inline-flex w-1/2 items-center justify-end gap-2">
+        <Button variant="outline" size="icon" onclick={toggleMode}>
+          <Sun class="scale-100 rotate-0 transition-all! dark:scale-0 dark:-rotate-90" />
+          <Moon class="absolute scale-0 rotate-90 transition-all! dark:scale-100 dark:rotate-0" />
+          <span class="sr-only">Toggle Theme</span>
+        </Button>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            {#snippet child({ props })}
+              <Button variant="outline" {...props}>
+                {data.session.user.name}
+                <Avatar.Root class="size-5">
+                  <Avatar.Image src={data.session.user.image} alt={data.session.user.name} />
+                  <Avatar.Fallback>
+                    {toUpperCase(charAt(data.session.user.name, 0))}
+                  </Avatar.Fallback>
+                </Avatar.Root>
+              </Button>
+            {/snippet}
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content align="end" class="w-64">
+            <DropdownMenu.Group>
+              <DropdownMenu.Label>
+                <p class="mb-0.5 text-[10px] font-normal text-muted-foreground">Signed in as</p>
+                <p>{data.session.user.name}</p>
+                <p class="text-xs font-medium text-muted-foreground">{data.session.user.email}</p>
+              </DropdownMenu.Label>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item onclick={async () => await goto(resolve('/profile'))}>
+                <UserCog />
+                Profile
+              </DropdownMenu.Item>
+              <DropdownMenu.Item variant="destructive" disabled={isSignOut} onclick={handleSignOut}>
+                {#if isSignOut}
+                  <Spinner />
+                {:else}
+                  <LogOut />
+                {/if}
+                Sign out
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </div>
     </div>
-  </Sidebar.Inset>
+    <div class="typography py-4">
+      {@render children()}
+    </div>
+  </div>
 </Sidebar.Provider>
