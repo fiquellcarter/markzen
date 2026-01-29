@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 
-const USER_AGENT = 'Mozilla/5.0 (compatible; Markzen/1.0; +http://localhost:5173)';
+const USER_AGENT = 'Mozilla/5.0 (compatible; Markzen/1.0; +https://markzen.my.id)';
 const FETCH_TIMEOUT = 10_000;
 
 const FALLBACK_TITLES = [
