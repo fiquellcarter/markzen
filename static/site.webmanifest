@@ -1,9 +1,9 @@
 {
   "lang": "en",
   "dir": "ltr",
-  "name": "Your Links, Your Way • Markzen",
+  "name": "Save and organize your links. Simply. • Markzen",
   "short_name": "Markzen",
-  "description": "A simple place to save and organize everything you find online.",
+  "description": "Markzen is a minimal bookmark manager to save links and organize bookmarks into simple collections.",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

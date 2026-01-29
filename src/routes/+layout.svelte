@@ -13,7 +13,7 @@
 </script>
 
 <MetaTags {...metaTags} />
-<ModeWatcher />
+<ModeWatcher defaultMode="dark" />
 <Toaster position="top-center" />
 
 {@render children()}

@@ -2,23 +2,46 @@ import { defineBaseMetaTags } from 'svelte-meta-tags';
 
 export function load({ url }) {
   const baseTags = defineBaseMetaTags({
-    title: 'Your Links, Your Way',
+    title: 'Save and organize your links. Simply.',
     titleTemplate: '%s • Markzen',
-    description: 'A simple place to save and organize everything you find online.',
+    description:
+      'Markzen is a minimal bookmark manager to save links and organize bookmarks into simple collections.',
     canonical: new URL(url.pathname, url.origin).href,
-    keywords: ['bookmarks', 'links', 'save', 'organize'],
+    keywords: [
+      'bookmark collections',
+      'bookmark manager',
+      'bookmark organizer',
+      'link manager',
+      'manage links online',
+      'minimal bookmark manager',
+      'organize bookmarks',
+      'save bookmarks',
+      'save links',
+      'simple bookmark manager',
+    ],
     twitter: {
       cardType: 'summary_large_image',
-      title: 'Your Links, Your Way',
-      description: 'A simple place to save and organize everything you find online.',
+      title: 'Save and organize your links. Simply.',
+      description:
+        'Markzen is a minimal bookmark manager to save links and organize bookmarks into simple collections.',
       creator: '@fiquellcarter',
+      image: `${new URL(url.pathname, url.origin).href}opengraph-image.png`,
+      imageAlt: 'Markzen',
     },
     openGraph: {
-      title: 'Your Links, Your Way',
-      description: 'A simple place to save and organize everything you find online.',
-      type: 'website',
       url: new URL(url.pathname, url.origin).href,
-      siteName: 'Markzen',
+      type: 'website',
+      title: 'Save and organize your links. Simply.',
+      description:
+        'Markzen is a minimal bookmark manager to save links and organize bookmarks into simple collections.',
+      images: [
+        {
+          url: `${new URL(url.pathname, url.origin).href}opengraph-image.png`,
+          alt: 'Markzen',
+          width: 1200,
+          height: 630,
+        },
+      ],
     },
     additionalLinkTags: [
       { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
