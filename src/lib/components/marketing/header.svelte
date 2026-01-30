@@ -9,9 +9,9 @@
   <div class="absolute top-4 left-1/2 container max-w-4xl -translate-x-1/2">
     <nav class="flex min-h-14 w-full items-center px-4 py-2">
       <div class="inline-flex w-1/2 items-center justify-start">
-        <a href={resolve('/')} class="mb-1">
-          <img src={LightLogo} alt="Markzen Logo" class="hidden h-auto w-20 dark:inline" />
-          <img src={DarkLogo} alt="Markzen Logo" class="h-auto w-20 dark:hidden" />
+        <a href={resolve('/')} class="mb-1" aria-label="Markzen Logo">
+          <enhanced:img src={LightLogo} alt="Markzen Logo" class="hidden h-auto w-20 dark:inline" />
+          <enhanced:img src={DarkLogo} alt="Markzen Logo" class="h-auto w-20 dark:hidden" />
         </a>
       </div>
       <div class="inline-flex w-1/2 items-center justify-end gap-2">

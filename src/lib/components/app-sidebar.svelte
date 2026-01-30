@@ -109,11 +109,14 @@
         <Sidebar.MenuButton size="lg" tooltipContent="Markzen">
           {#snippet child({ props })}
             <a href={resolve('/dashboard')} {...props}>
-              <img
+              <enhanced:img
                 src={LightLogo}
                 alt="Markzen Logo"
                 class="mb-1 ml-1 hidden h-auto w-20 dark:inline" />
-              <img src={DarkLogo} alt="Markzen Logo" class="mb-1 ml-1 h-auto w-20 dark:hidden" />
+              <enhanced:img
+                src={DarkLogo}
+                alt="Markzen Logo"
+                class="mb-1 ml-1 h-auto w-20 dark:hidden" />
             </a>
           {/snippet}
         </Sidebar.MenuButton>

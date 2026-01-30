@@ -32,11 +32,11 @@
       <div class="relative h-64 w-full overflow-hidden">
         <div class="absolute inset-0 z-10 bg-linear-to-l from-background/95 to-transparent"></div>
         <div class="absolute inset-0 z-10 bg-linear-to-t from-background/95 to-transparent"></div>
-        <img
+        <enhanced:img
           class="origin-top-left scale-200 dark:hidden"
           src={LightDashboardScreenshot}
           alt="Light dashboard screenshot" />
-        <img
+        <enhanced:img
           class="hidden origin-top-left scale-200 dark:inline"
           src={DarkDashboardScreenshot}
           alt="Dark dashboard screenshot" />
@@ -50,11 +50,11 @@
       <div class="relative h-64 w-full overflow-hidden">
         <div class="absolute inset-0 z-10 bg-linear-to-r from-background/95 to-transparent"></div>
         <div class="absolute inset-0 z-10 bg-linear-to-t from-background/95 to-transparent"></div>
-        <img
+        <enhanced:img
           class="origin-top-right scale-200 dark:hidden"
           src={LightDashboardScreenshot}
           alt="Light dashboard screenshot" />
-        <img
+        <enhanced:img
           class="hidden origin-top-right scale-200 dark:inline"
           src={DarkDashboardScreenshot}
           alt="Dark dashboard screenshot" />
@@ -85,8 +85,14 @@
       </div>
       <div class="relative h-72 w-full translate-y-16 overflow-hidden">
         <div class="absolute inset-0 z-10 bg-linear-to-t from-background/95 to-transparent"></div>
-        <img class="dark:hidden" src={LightMobileScreenshot} alt="Light mobile screenshot" />
-        <img class="hidden dark:inline" src={DarkMobileScreenshot} alt="Dark mobile screenshot" />
+        <enhanced:img
+          class="dark:hidden"
+          src={LightMobileScreenshot}
+          alt="Light mobile screenshot" />
+        <enhanced:img
+          class="hidden dark:inline"
+          src={DarkMobileScreenshot}
+          alt="Dark mobile screenshot" />
       </div>
     </div>
   </div>

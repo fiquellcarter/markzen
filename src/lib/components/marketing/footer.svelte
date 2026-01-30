@@ -8,9 +8,9 @@
 <footer class="container max-w-4xl pt-16">
   <div class="mb-16 flex flex-col gap-12 sm:flex-row sm:justify-between sm:gap-24">
     <div class="max-w-xs">
-      <a href={resolve('/')}>
-        <img src={LightLogo} alt="Markzen Logo" class="hidden h-auto w-24 dark:inline" />
-        <img src={DarkLogo} alt="Markzen Logo" class="h-auto w-24 dark:hidden" />
+      <a href={resolve('/')} aria-label="Markzen Logo">
+        <enhanced:img src={LightLogo} alt="Markzen Logo" class="hidden h-auto w-24 dark:inline" />
+        <enhanced:img src={DarkLogo} alt="Markzen Logo" class="h-auto w-24 dark:hidden" />
       </a>
       <p class="my-4 text-sm text-muted-foreground">
         Save and organize the web. Boost your productivity and centralize your information
