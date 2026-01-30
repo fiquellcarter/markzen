@@ -4,6 +4,10 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { env } from '$env/dynamic/private';
 import { db } from '$lib/server/db';
 
+if (!env.BETTER_AUTH_SECRET) {
+  throw new Error('BETTER_AUTH_SECRET is not set');
+}
+
 if (!env.BETTER_AUTH_GITHUB_CLIENT_ID) {
   throw new Error('BETTER_AUTH_GITHUB_CLIENT_ID is not set');
 }
@@ -13,6 +17,7 @@ if (!env.BETTER_AUTH_GITHUB_CLIENT_SECRET) {
 }
 
 export const auth = betterAuth({
+  secret: env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(db, {
     provider: 'sqlite',
   }),
