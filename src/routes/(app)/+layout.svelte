@@ -51,7 +51,7 @@
     createCollectionForm={data.createCollectionForm}
     createBookmarkForm={data.createBookmarkForm} />
   <div class="container">
-    <div class="flex min-h-12 w-full items-center py-2">
+    <header class="flex min-h-12 w-full items-center py-2">
       <div class="inline-flex w-1/2 items-center justify-start">
         <Sidebar.Trigger />
       </div>
@@ -99,9 +99,9 @@
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       </div>
-    </div>
-    <div class="typography py-4">
+    </header>
+    <main class="typography py-4">
       {@render children()}
-    </div>
+    </main>
   </div>
 </Sidebar.Provider>
