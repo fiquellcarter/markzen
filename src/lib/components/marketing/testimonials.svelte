@@ -26,7 +26,7 @@
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
     {#each testimonials as testimonial (testimonial.name)}
       <div>
-        <div class="rounded-2xl rounded-bl border bg-card/20 px-4 py-3 text-card-foreground">
+        <div class="rounded-lg rounded-bl border bg-card/20 px-4 py-3 text-card-foreground">
           <p>{testimonial.quote}</p>
         </div>
         <div class="not-typography mt-4 flex items-center gap-2">

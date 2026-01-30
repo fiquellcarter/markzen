@@ -62,7 +62,7 @@
   </Card.Content>
   <Card.Footer class="justify-center border-t">
     <p class="text-xs text-pretty text-muted-foreground">
-      By continuing, you agree to our <a href="##">Terms</a> and <a href="##">Privacy Policy</a>.
+      By continuing, you agree to our Terms and Privacy Policy.
     </p>
   </Card.Footer>
 </Card.Root>

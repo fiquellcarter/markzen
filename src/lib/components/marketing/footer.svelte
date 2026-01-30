@@ -41,7 +41,9 @@
           <li>
             <a href="#features">Features</a>
           </li>
-          <li>Contact us</li>
+          <li>
+            <a href="mailto:fiquellcarter@gmail.com">Contact us</a>
+          </li>
         </ul>
       </div>
       <div class="flex flex-col gap-4">
@@ -59,8 +61,8 @@
     class="flex flex-col items-center border-t border-border/50 py-4 text-sm text-muted-foreground sm:flex-row sm:justify-between">
     <p>&copy; {new Date().getFullYear()} Markzen. All rights reserved.</p>
     <div class="mt-2 flex items-center gap-4 sm:mt-0">
-      <a href="##">Terms</a>
-      <a href="##">Privacy Policy</a>
+      <p>Terms</p>
+      <p>Privacy Policy</p>
     </div>
   </div>
 </footer>

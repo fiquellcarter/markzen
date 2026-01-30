@@ -6,7 +6,7 @@
 
 <section class="container max-w-4xl py-32">
   <div
-    class="relative overflow-hidden rounded-2xl border bg-card/20 px-2 py-12 text-center text-card-foreground sm:px-12">
+    class="relative overflow-hidden rounded-lg border bg-card/20 px-2 py-12 text-center text-card-foreground sm:px-12">
     <div
       class="absolute top-0 right-0 h-3/5 w-2/5 translate-x-1/3 -translate-y-1/3 rounded-full bg-primary/20 blur-[6.25rem]">
     </div>
