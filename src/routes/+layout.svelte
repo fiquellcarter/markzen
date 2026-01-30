@@ -12,6 +12,21 @@
   let metaTags = $derived(deepMerge(data.baseMetaTags, page.data.pageMetaTags));
 </script>
 
+<svelte:head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1LB1BBEE19"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-1LB1BBEE19');
+  </script>
+</svelte:head>
+
 <MetaTags {...metaTags} />
 <ModeWatcher defaultMode="dark" />
 <Toaster position="top-center" />
